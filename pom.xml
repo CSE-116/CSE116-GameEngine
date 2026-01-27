@@ -7,7 +7,7 @@
     <version>1.0</version>
 
     <properties>
-        <java.version>23</java.version>
+        <java.version>25</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <javafx.version>23.0.1</javafx.version>

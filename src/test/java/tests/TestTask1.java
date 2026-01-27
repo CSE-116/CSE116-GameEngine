@@ -1,4 +1,5 @@
-package app.tests;
+package tests;
+// package app.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

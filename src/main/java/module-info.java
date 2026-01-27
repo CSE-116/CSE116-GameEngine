@@ -11,9 +11,7 @@ module app {
     requires javafx.swing;
     requires javafx.media;
     requires transitive javafx.graphics;
-    requires junit;
     requires java.desktop;
 
-    exports app.tests to junit;
     exports app;
 }
