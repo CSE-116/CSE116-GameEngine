@@ -5,6 +5,12 @@ import java.util.Arrays;
 
 import app.display.common.SpriteLocation;
 
+/**
+ * A high damage projectile which only damages enemies.
+ * 
+ * @see Projectile
+ * @see PlayerAxePickup
+ */
 public class PlayerAxeProjectile extends Projectile {
 
     public PlayerAxeProjectile(double x, double y) {

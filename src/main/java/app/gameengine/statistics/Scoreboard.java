@@ -20,24 +20,24 @@ public class Scoreboard {
     private String statsPath;
     private BinaryTreeNode<GameStat> root;
 
-    public Scoreboard(String gameName) {
-        this(gameName, new Comparator<>());
-    }
-
     public Scoreboard(String gameName, Comparator<GameStat> comparator) {
         this.statsPath = STATS_DIRECTORY + gameName.toLowerCase() + STATS_POSTFIX;
     }
 
     public void addScore(GameStat score) {
-        
+
     }
 
     public LinkedListNode<GameStat> getScoreList() {
         return null;
     }
 
+    public BinaryTreeNode<GameStat> getScoreTree() {
+        return null;
+    }
+
     public void loadStats() {
-        
+
     }
 
     public void saveStats() {
@@ -51,7 +51,7 @@ public class Scoreboard {
                 writer.write(stats.getValue().toString() + "\n");
             }
         } catch (IOException e) {
-            System.out.println("** Could not save statistics to " + this.statsPath + " **");
+            System.err.println("** Could not save statistics to " + this.statsPath + " **");
             e.printStackTrace();
         }
     }

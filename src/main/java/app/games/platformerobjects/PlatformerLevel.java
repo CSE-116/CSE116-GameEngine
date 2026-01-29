@@ -4,7 +4,6 @@ import app.display.common.Background;
 import app.display.common.controller.PlatformerControls;
 import app.gameengine.Game;
 import app.gameengine.Level;
-import app.gameengine.model.physics.PhysicsEngine;
 import app.gameengine.model.physics.PhysicsEngineWithGravity;
 
 /**
@@ -20,11 +19,7 @@ import app.gameengine.model.physics.PhysicsEngineWithGravity;
 public class PlatformerLevel extends Level {
 
     public PlatformerLevel(Game game, int width, int height, String name) {
-        this(game, new PhysicsEngineWithGravity(), width, height, name);
-    }
-
-    public PlatformerLevel(Game game, PhysicsEngine engine, int width, int height, String name) {
-        super(game, engine, width, height, name);
+        super(game, new PhysicsEngineWithGravity(), width, height, name);
         this.keyboardControls = new PlatformerControls(game);
         this.background = new Background("nature/nature_4/full.png", 0.5);
     }

@@ -2,12 +2,13 @@ package app.games;
 
 import app.Configuration;
 import app.StartGame;
-import app.display.minesweeper.MinesweeperGame;
 import app.gameengine.Game;
 import app.games.mario.MarioGame;
+import app.games.minesweeper.MinesweeperGame;
 import app.games.pacman.PacmanGame;
 import app.games.roguelikeobjects.RoguelikeGame;
 import app.games.snake.SnakeGame;
+import javafx.application.Platform;
 
 /**
  * Factory class for creating {@code Game} objects.
@@ -54,11 +55,11 @@ public class GameFactory {
                 game = new RoguelikeGame();
                 break;
             default:
-                System.out.println("No such game");
+                System.err.printf("*** No such game \"%s\". Exiting ***\n", gameName);
+                Platform.exit();
+                return game;
         }
-        if (game != null) {
-            game.init();
-        }
+        game.init();
         return game;
     }
 

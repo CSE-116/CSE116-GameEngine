@@ -12,6 +12,7 @@ import app.gameengine.model.gameobjects.GameObject;
 import app.games.GameFactory;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,6 +38,8 @@ import javafx.stage.Stage;
  * @see Level
  */
 public class StartGame extends Application {
+
+    private static boolean VERBOSE = true;
 
     // Game
     private Game game;
@@ -84,6 +87,11 @@ public class StartGame extends Application {
             @Override
             public void handle(long now) {
                 Level currentLevel = game.getCurrentLevel();
+                if (currentLevel == null) {
+                    System.err.println("*** No level loaded (current level is null). Exiting ***");
+                    Platform.exit();
+                    return;
+                }
                 if (lastUpdate == 0) {
                     start = now;
                     lastUpdate = now;
@@ -113,8 +121,9 @@ public class StartGame extends Application {
                 }
 
                 if (dt > 0.01) {
-                    // we only have 13 ms to process a frame
-                    System.out.printf("Getting slow: %2.0f ms/frame (%-3.0f fps)\n", dt * 1000, 1 / dt);
+                    if (VERBOSE) {
+                        System.out.printf("Getting slow: %2.0f ms/frame (%-3.0f fps)\n", dt * 1000, 1 / dt);
+                    }
                 }
             }
         }.start();
@@ -282,10 +291,10 @@ public class StartGame extends Application {
     }
 
     private boolean isInBounds(GameObject object, Rectangle view) {
-        return object.getLocation().getX() <= view.getX() + view.getWidth()
-                && object.getLocation().getX() + object.getSpriteDimensions().getX() >= view.getX()
-                && object.getLocation().getY() <= view.getY() + view.getHeight()
-                && object.getLocation().getY() + object.getSpriteDimensions().getY() >= view.getY();
+        return object.getSpriteOrigin().getX() <= view.getX() + view.getWidth()
+                && object.getSpriteOrigin().getX() + object.getSpriteDimensions().getX() >= view.getX()
+                && object.getSpriteOrigin().getY() <= view.getY() + view.getHeight()
+                && object.getSpriteOrigin().getY() + object.getSpriteDimensions().getY() >= view.getY();
     }
 
     private void scaleRectangle(Rectangle rect, double scaleFactor) {

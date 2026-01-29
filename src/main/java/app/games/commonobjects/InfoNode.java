@@ -6,6 +6,13 @@ import app.gameengine.model.gameobjects.DynamicGameObject;
 import app.gameengine.model.gameobjects.StaticGameObject;
 import app.gameengine.model.physics.Vector2D;
 
+/**
+ * A static object capable of displaying a message when in contact with the
+ * player.
+ * 
+ * @see StaticGameObject
+ * @see FancyTextEffect
+ */
 public class InfoNode extends StaticGameObject {
 
     private String message;

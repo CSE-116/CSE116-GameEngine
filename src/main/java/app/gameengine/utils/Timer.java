@@ -88,30 +88,34 @@ public class Timer {
     }
 
     /**
-     * Increase the amount of time that has elapsed by dt, and return whether the
-     * cooldown has finished. If so, additionally reset the timer.
+     * Increase the amount of time that has elapsed by dt, and return the number of
+     * times the cooldown has been passed. If the cooldown has been passed at least
+     * once, also resets the timer, carrying over additional time.
      * 
      * @param dt the elapsed time, in seconds
-     * @return
+     * @return the number of times the cooldown has passed
      */
-    public boolean tick(double dt) {
+    public int tick(double dt) {
         if (isPaused) {
-            return false;
+            return 0;
         }
         this.elapsed += dt;
-        if (elapsed > cooldown) {
-            this.reset();
-            return true;
+        if (elapsed >= cooldown) {
+            int num = cooldown <= 0 ? 1 : (int) (elapsed / cooldown);
+            this.elapsed = cooldown <= 0 ? 0 : elapsed % cooldown;
+            return num;
         }
-        return false;
+        return 0;
     }
 
     /**
-     * Returns whether the cooldown has finished. If so, reset the timer.
+     * Returns the number of times the cooldown has been passed. If the cooldown has
+     * been passed at least once, also resets the timer, carrying over additional
+     * time.
      * 
-     * @return {@code true} if the cooldown has finished, {@code false} otherwise
+     * @return the number of times the cooldown has passed
      */
-    public boolean check() {
+    public int check() {
         return tick(0);
     }
 

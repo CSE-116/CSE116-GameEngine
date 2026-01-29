@@ -4,12 +4,11 @@
 
 # Introduction
 
-This project will be the main component of the coding tasks for CSE 116. For each task, all the information you need is
+This project will be a large component of the coding tasks for CSE 116. For each task, all the information you need is
 on [cse116.com](https://cse116.com/). Scroll through the course schedule to find links to the requirements for each
 task. Links will go live as they are released.
 
-If you ever have any questions, visit [piazza](https://piazza.com/class/meahudzh24h333/) to ask questions and find the
-office hours schedule.
+If you ever have any questions, visit the course piazza to ask questions and find the office hours schedule.
 
 This readme aims to provide a broad overview of the project scope and structure, and to be a useful reference while
 working on the tasks. That said, each file in the project will have comments and documentation that explain their
@@ -25,8 +24,8 @@ explain it!
 >
 > A good rule of thumb is to
 >
-> -   Never move files/folders around in the filetree.
-> -   Never change method/class names or access modifiers.
+> - Never move files/folders around in the filetree.
+> - Never change method/class names or access modifiers.
 >
 > Making any of these changes gives a very high chance that you will fail during autograding since the grader is
 > expecting a specific structure.
@@ -36,10 +35,11 @@ explain it!
 
 There are many modifications you can make that are guaranteed to be safe, however. For example:
 
--   Changing sprites/backgrounds/sound effects.
--   Changing options in `Configuration`.
--   Creating new files/classes/methods\*.
--   Completing the tasks.
+- Changing sprites/backgrounds/sound effects.
+- Adding new levels, and changing the provided levels, except for the test levels
+- Changing options in `Configuration`.
+- Creating new files/classes/methods\*.
+- Completing the tasks.
 
 \*Creating new files/classes/methods is usually fine, as long as they are not used from within your test classes. This
 is because during autograding, your tests are run against our code, which would not have these files/classes/methods.
@@ -73,13 +73,13 @@ movement, collision detection, level loading, and physics. Later tasks include e
 While this sample game showcases the basics of the engine, there are several other games on offer that you will complete
 throughout the project. To change which game you are playing, find the file `Configuration` and change the variable
 _GAME_ to another game. The games currently available are "Sample Game", "Minesweeper", "Snake", "Mario", "Pacman", and
-"Roguelike Game. None of these are likely to be playable at the beginning of the project, and more may be available by
+"Roguelike Game". None of these are likely to be playable at the beginning of the project, and more may be available by
 the end of the semester.
 
 ## The Coordinate System
 
-The coordinate system used for computer graphics might be different than you used to. We'll use the standard coordinate
-system that is typically used in video games (and anything involving rendering to a screen).
+The coordinate system used for computer graphics might be different than you're used to. We'll use the standard
+coordinate system that is typically used in video games (and anything involving rendering to a screen).
 
 The origin of the system is at the top-left of the screen/window/level with positive x going right and positive y going
 down. This image shows the same information as the one above, but with the coordinate system labeling all the tiles in
@@ -101,7 +101,30 @@ above, the green dot represents the location of that object, the blue outline re
 that is being rendered for that object, and the red outline represents the size of its hitbox. Having a hitbox smaller
 than the graphical sprite allows for more precise physics and collision, but means that extra care has to be taken when
 dealing with those properties. Pressing F4 in game shows overlays of each object's hitbox, which can be helpful for
-debugging.
+debugging. More information in debug controls can be found below.
+
+## Debug Controls
+
+The best way to test your code is using automated unit tests, such as those that are provided to you or those that you
+write yourself. However, running the game can also be useful for getting an idea of general correctness, or
+understanding what bugs exist and how they affect the game. To that end, several controls have been implemented that
+work across games and may help you debug. The full list of controls can be viewed at any time in game by pressing "Q".
+They are as follows:
+
+- Q: View the list of debug controls
+- Escape: Pause/unpause the game, and show the pause menu
+- P: Pause/unpause the game, without showing the pause menu
+- Space: Take the current level's action, usually using the Player's equipped item
+- Tab: Cycle the Player's inventory
+- F1: Reset the current level
+- F2: Reset the entire game, and start from the beginning
+- F3: Advance the game to the next level
+- F4: Show/hide hitboxes for all objects in the level
+- F5: Show/hide paths for all Agents in the level
+- F6: Toggle god mode, preventing damage or destruction
+- F7: Toggle noclip, preventing the Player from colliding with other objects
+- F8: Destroy all enemies and projectiles in the level
+- F9: Close the game
 
 ## Project Structure
 
@@ -114,8 +137,8 @@ here, many of them you will never need to touch or understand, and are simply to
 The top level class is the application itself, in this case `StartGame`. When you run this class, it creates a `Game`,
 of whatever type you're playing. Each game will have one or more levels, often in a linear sequence, as well as a
 player. Each `Level` possesses a list of static objects and a list of dynamic objects, as well as a set of controls for
-keyboard and mouse input and a physics engine. Each `DynamicGameObject` (which includes the player) has a location, a
-hitbox, and health. `StaticGameObject`s also have a location and hitbox, but do not have health.
+keyboard and mouse input and a physics engine. Each `StaticGameObject` has a location and a hitbox. `DynamicGameObject`s
+(which includes the player) also have health, and are destroyed if their health is depleted.
 
 While specific logic differs for each game, the responsibilities of each type of class remain consistent: **Games**
 manage **Levels**; **Levels** manage overall logic, and possess **Controls**, **PhysicsEngines**, and **Objects**;
@@ -138,24 +161,23 @@ much simpler. You should try to familiarize yourself with this structure in the 
 IntelliJ is a powerful IDE (Integrated Development Environment) with many tools that can make programming easier. In no
 particular order, some of our favorite tips and uses are listed below.
 
--   Shift-shift to search: Double tapping the shift key brings up a menu that allows you to search for files, functions,
-    and other parts of the project. This can be very useful for navigating the codebase quickly, even once you're
-    familiar with the layout.
--   Debugger: The debuggger is an invaluable tool for understanding exactly what your code is doing, especially if it's
-    doing something wrong. There will be several lectures and labs about using it, but it may help to familiarize
-    yourself with it early.
--   Auto format: When writing code, it's easy for it to get messy, with misaligned brackets and indents. The shortcut
-    Ctrl+Alt+L (⌘+⌥+L on macOS) will automatically format the current file, fixing these issues.
--   Javadoc comment viewing: Hovering your mouse over the name of a class or method shows details, called javadoc
-    comments, which describe the purpose and function of the method in greater detail. Most of the provided classes and
-    methods in the game engine have these comments, and nearly all Java built-in classes and methods have them.
--   Inspection tooltips: Hovering over a red or yellow underlined portion of code shows a description of the issue, as
-    well as, often, a suggested fix. Be careful automatically applying the fix, though, as it may have unintended
-    effects.
--   Comment/uncomment region: Use the shortcut ctrl+/ (⌘+/ on macOS)to comment out all of the lines you have selected.
-    If these lines are already commented, they will be uncommented instead.
--   Go to declaration: By holding the control key (⌘ on macOS), clicking on the name of a class or method takes you to
-    the declaration of that method. This can help when exploring a large codebase.
+- Shift-shift to search: Double tapping the shift key brings up a menu that allows you to search for files, functions,
+  and other parts of the project. This can be very useful for navigating the codebase quickly, even once you're familiar
+  with the layout.
+- Debugger: The debuggger is an invaluable tool for understanding exactly what your code is doing, especially if it's
+  doing something wrong. There will be several lectures and labs about using it, but it may help to familiarize yourself
+  with it early.
+- Auto format: When writing code, it's easy for it to get messy, with misaligned brackets and indents. The shortcut
+  Ctrl+Alt+L (⌘+⌥+L on macOS) will automatically format the current file, fixing these issues.
+- Javadoc comment viewing: Hovering your mouse over the name of a class or method shows details, called javadoc
+  comments, which describe the purpose and function of the method in greater detail. Most of the provided classes and
+  methods in the game engine have these comments, and nearly all Java built-in classes and methods have them.
+- Inspection tooltips: Hovering over a red or yellow underlined portion of code shows a description of the issue, as
+  well as, often, a suggested fix. Be careful automatically applying the fix, though, as it may have unintended effects.
+- Comment/uncomment region: Use the shortcut ctrl+/ (⌘+/ on macOS)to comment out all of the lines you have selected. If
+  these lines are already commented, they will be uncommented instead.
+- Go to declaration: By holding the control key (⌘ on macOS), clicking on the name of a class or method takes you to the
+  declaration of that method. This can help when exploring a large codebase.
 
 ## Level Editor
 
@@ -198,7 +220,7 @@ limit, as it only compresses files necessary for grading.
 **Settings**: This file contains several settings that may change while the game is running. Most of these are
 controllable with keyboard input.
 
-## `src/main/java/app/tests/`
+## `src/test/java/tests/`
 
 This package is where you will be writing all of your tests for each task.
 
@@ -257,7 +279,8 @@ should not need to be modified, but may be useful to understand if you wish to p
 ## `data/`
 
 This directory contains files necessary to running the games that are not source code. Namely sprites, background
-images, and sound effects, though each is described in more detail below.
+images, and sound effects, though each is described in more detail below. The sprites and background images have default
+"fallback" images in case the provided one could not be found, which missing audio will simply not play.
 
 ### `data/sprites/`
 
@@ -269,7 +292,8 @@ your game, download or create more sprite sheets and add them to this directory.
 
 For games that use background images, they are stored here. Most of these are just artistic landscape backgrounds not
 associated with a specific game. A cool feature is that these have multiple layers that can be overlapped with different
-parallax values to make farther objects appear to move slower than nearer ones.
+parallax values to make farther objects appear to move slower than nearer ones, though this is likely not used by any
+game by default.
 
 ### `data/fonts/`
 

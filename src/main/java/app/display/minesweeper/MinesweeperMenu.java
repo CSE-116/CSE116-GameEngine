@@ -1,7 +1,6 @@
 package app.display.minesweeper;
 
 import app.Configuration;
-import app.display.common.FontManager;
 import app.display.common.JFXManager;
 import app.display.common.PlaceholderNode;
 import app.display.common.ui.UIElement;
@@ -9,14 +8,15 @@ import app.gameengine.Level;
 import app.gameengine.model.datastructures.LinkedListNode;
 import app.gameengine.statistics.GameStat;
 import app.gameengine.statistics.Scoreboard;
+import app.games.minesweeper.MinesweeperGame;
 import app.games.minesweeper.MinesweeperLevel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -33,16 +33,6 @@ import javafx.scene.text.Text;
  * @see Scoreboard
  */
 public class MinesweeperMenu extends UIElement {
-
-    private static double FONT_SIZE_LARGE = 15 * Configuration.ZOOM;
-    private static double FONT_SIZE_MEDIUM = 10 * Configuration.ZOOM;
-    private static double FONT_SIZE_SMALL = 7 * Configuration.ZOOM;
-    private static double BUTTON_SPACING = 3 * Configuration.ZOOM;
-    private static double BUTTON_WIDTH = 70 * Configuration.ZOOM;
-    private static double BUTTON_HEIGHT = 15 * Configuration.ZOOM;
-    private static double SCOREBOARD_WIDTH = 100 * Configuration.ZOOM;
-    private static double SCOREBOARD_HEIGHT = 15 * Configuration.ZOOM;
-    private static double SCOREBOARD_PADDING = 2 * Configuration.ZOOM;
 
     private Node root;
     private StackPane pane;
@@ -70,32 +60,43 @@ public class MinesweeperMenu extends UIElement {
             height = Configuration.SCALE_FACTOR * game.getCurrentLevel().getViewHeight();
         }
         this.background = new Rectangle(width, height);
-        this.background.setFill(Color.GRAY);
+        this.background.setFill(MinesweeperStyle.menuBgColor());
 
         Text title = new Text("START NEW GAME");
-        title.setFill(Color.BLACK);
-        title.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_LARGE));
+        title.setFill(MinesweeperStyle.titleColor());
+        title.setFont(MinesweeperStyle.largeFont());
 
-        BeveledButton beginner = new BeveledButton("Beginner", () -> game.changeLevel("beginner"), BUTTON_WIDTH,
-                BUTTON_HEIGHT, FONT_SIZE_MEDIUM);
-        BeveledButton intermediate = new BeveledButton("Intermediate", () -> game.changeLevel("intermediate"),
-                BUTTON_WIDTH, BUTTON_HEIGHT,
-                FONT_SIZE_MEDIUM);
-        BeveledButton expert = new BeveledButton("Expert", () -> game.changeLevel("expert"), BUTTON_WIDTH,
-                BUTTON_HEIGHT, FONT_SIZE_MEDIUM);
+        BeveledButton beginner = new BeveledButton("Beginner", () -> game.changeLevel("beginner"));
+        BeveledButton intermediate = new BeveledButton("Intermediate", () -> game.changeLevel("intermediate"));
+        BeveledButton expert = new BeveledButton("Expert", () -> game.changeLevel("expert"));
         BeveledButton custom = new BeveledButton("Custom", () -> {
             this.pane.getChildren().removeIf(a -> a instanceof VBox);
             this.pane.getChildren().add(customSelect);
-        }, BUTTON_WIDTH, BUTTON_HEIGHT, FONT_SIZE_MEDIUM);
+        });
         BeveledButton scoreButton = new BeveledButton("Scoreboard", () -> {
+            this.game.getScoreboard().loadStats();
             this.pane.getChildren().removeIf(a -> a instanceof VBox);
             this.pane.getChildren().add(getScoreboardMenu());
-        }, BUTTON_WIDTH, BUTTON_HEIGHT, FONT_SIZE_MEDIUM);
+        });
 
         this.customSelect = getCustomMenu();
 
-        this.diffSelect = new VBox(BUTTON_SPACING, title, beginner, intermediate, expert, custom, scoreButton);
+        this.diffSelect = new VBox(MinesweeperStyle.buttonSpacing(), title, beginner, intermediate, expert,
+                custom, scoreButton);
+        this.diffSelect.setMaxWidth(MinesweeperStyle.buttonWidth());
         this.diffSelect.setAlignment(Pos.CENTER);
+
+        Tooltip beginnerTip = new Tooltip("9 x 9, 10 bombs");
+        beginnerTip.setStyle(MinesweeperStyle.tooltipStyle());
+        Tooltip.install(beginner, beginnerTip);
+
+        Tooltip intermediateTip = new Tooltip("16 x 16, 40 bombs");
+        intermediateTip.setStyle(MinesweeperStyle.tooltipStyle());
+        Tooltip.install(intermediate, intermediateTip);
+
+        Tooltip expertTip = new Tooltip("30 x 16, 99 bombs");
+        expertTip.setStyle(MinesweeperStyle.tooltipStyle());
+        Tooltip.install(expert, expertTip);
 
         this.pane = new StackPane(background, this.diffSelect);
         this.root = this.pane;
@@ -109,130 +110,134 @@ public class MinesweeperMenu extends UIElement {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
+    private BeveledBorderPane getScoreboardEntry(GameStat stat) {
+        Text name, time;
+        if (stat == null) {
+            name = new Text("---");
+            name.setFill(MinesweeperStyle.sbEmptyColor());
+            time = new Text("--:--");
+            time.setFill(MinesweeperStyle.sbEmptyColor());
+        } else {
+            name = new Text(stat.getEntryName());
+            name.setFill(MinesweeperStyle.sbTextColor());
+            time = new Text(formatDuration(stat.getPlaytime()));
+            time.setFill(MinesweeperStyle.sbTextColor());
+        }
+        StackPane.setAlignment(name, Pos.CENTER_LEFT);
+        name.setFont(MinesweeperStyle.scoreboardFont());
+        StackPane.setAlignment(time, Pos.CENTER_RIGHT);
+        time.setFont(MinesweeperStyle.scoreboardFont());
+
+        StackPane row = new StackPane(name, time);
+        row.setPadding(new Insets(0, MinesweeperStyle.sbPadding(), 0,
+                MinesweeperStyle.sbPadding()));
+
+        BeveledBorderPane entryPane = new BeveledBorderPaneBuilder(row)
+                .backgroundColor(MinesweeperStyle.sbBgColor())
+                .topLeftColor(MinesweeperStyle.sbDarkColor())
+                .bottomRightColor(MinesweeperStyle.sbLightColor())
+                .bevelThickness(MinesweeperStyle.sbBorderSize())
+                .build();
+        entryPane.setMaxWidth(MinesweeperStyle.sbWidth());
+        entryPane.setPrefWidth(MinesweeperStyle.sbWidth());
+        entryPane.setMaxHeight(MinesweeperStyle.sbHeight());
+        entryPane.setPrefHeight(MinesweeperStyle.sbHeight());
+        return entryPane;
+    }
+
     private VBox getScoreboardMenu() {
         Text text = new Text("SCOREBOARD");
-        text.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_LARGE));
+        text.setFill(MinesweeperStyle.titleColor());
+        text.setFont(MinesweeperStyle.largeFont());
 
-        VBox menu = new VBox(BUTTON_SPACING, text);
+        VBox menu = new VBox(MinesweeperStyle.buttonSpacing(), text);
         menu.setAlignment(Pos.CENTER);
 
         boolean scoreboardExists = true;
         if (game.getScoreboard() == null) {
             scoreboardExists = false;
         } else {
-            this.game.getScoreboard().loadStats();
-            LinkedListNode<GameStat> node = this.game.getScoreboard().getScoreList();
-            if (node == null) {
+            if (this.game.getScoreboard().getScoreTree() == null) {
                 scoreboardExists = false;
             }
         }
         if (!scoreboardExists) {
             Text noneText = new Text("No scoreboard available");
-            noneText.setFill(Color.WHITE.deriveColor(0, 1, 0.15, 1));
-            noneText.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_MEDIUM));
+            noneText.setFill(MinesweeperStyle.sbNoneColor());
+            noneText.setFont(MinesweeperStyle.mediumFont());
             menu.getChildren().add(noneText);
         } else {
-            double availableHeight = this.background.getHeight() - FONT_SIZE_LARGE - BUTTON_HEIGHT - BUTTON_SPACING * 3;
-            double entryHeight = SCOREBOARD_HEIGHT + BUTTON_SPACING;
+            double availableHeight = this.background.getHeight() - MinesweeperStyle.fontSizeLarge()
+                    - MinesweeperStyle.buttonHeight() - MinesweeperStyle.buttonSpacing() * 3;
+            double entryHeight = MinesweeperStyle.sbHeight() + MinesweeperStyle.buttonSpacing();
             int maxEntries = (int) (availableHeight / entryHeight);
 
-            this.game.getScoreboard().loadStats();
             int count = 0;
             LinkedListNode<GameStat> node = this.game.getScoreboard().getScoreList();
             for (; count < maxEntries && node != null; count++, node = node.getNext()) {
                 GameStat stat = node.getValue();
-                Text name = new Text(stat.getEntryName());
-                name.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_MEDIUM));
-                name.setFill(Color.LIMEGREEN);
-                StackPane.setAlignment(name, Pos.CENTER_LEFT);
-
-                Text time = new Text(formatDuration(stat.getPlaytime()));
-                time.setFont(FontManager.getFont("digital-7/digital-7 (mono).ttf", FONT_SIZE_MEDIUM));
-                time.setFill(Color.LIMEGREEN);
-                StackPane.setAlignment(time, Pos.CENTER_RIGHT);
-
-                StackPane row = new StackPane(name, time);
-                row.setPadding(new Insets(0, SCOREBOARD_PADDING, 0, SCOREBOARD_PADDING));
-
-                BeveledBorderPane entryPane = new BeveledBorderPaneBuilder(row).bottomRightColor(Color.GRAY.brighter())
-                        .build();
-                entryPane.setMaxWidth(SCOREBOARD_WIDTH);
-                entryPane.setPrefWidth(SCOREBOARD_WIDTH);
-                entryPane.setMaxHeight(SCOREBOARD_HEIGHT);
-                entryPane.setPrefHeight(SCOREBOARD_HEIGHT);
-                menu.getChildren().add(entryPane);
+                if (stat.getEntryName().toLowerCase().contains("custom") || Double.isInfinite(stat.getScore())) {
+                    count--;
+                    continue;
+                }
+                menu.getChildren().add(getScoreboardEntry(stat));
             }
             for (; count < maxEntries; count++) {
-                Text name = new Text("---");
-                name.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_MEDIUM));
-                name.setFill(Color.DARKGRAY);
-                StackPane.setAlignment(name, Pos.CENTER_LEFT);
-
-                Text time = new Text("--:--");
-                time.setFont(FontManager.getFont("digital-7/digital-7 (mono).ttf", FONT_SIZE_MEDIUM));
-                time.setFill(Color.DARKGRAY);
-                StackPane.setAlignment(time, Pos.CENTER_RIGHT);
-
-                StackPane row = new StackPane(name, time);
-                row.setPadding(new Insets(0, SCOREBOARD_PADDING, 0, SCOREBOARD_PADDING));
-
-                BeveledBorderPane emptyPane = new BeveledBorderPaneBuilder(row).bottomRightColor(Color.GRAY.brighter())
-                        .build();
-                emptyPane.setMaxWidth(SCOREBOARD_WIDTH);
-                emptyPane.setPrefWidth(SCOREBOARD_WIDTH);
-                emptyPane.setMaxHeight(SCOREBOARD_HEIGHT);
-                emptyPane.setPrefHeight(SCOREBOARD_HEIGHT);
-                menu.getChildren().add(emptyPane);
+                menu.getChildren().add(getScoreboardEntry(null));
             }
         }
 
         BeveledButton back = new BeveledButton("Back", () -> {
             this.pane.getChildren().removeIf(a -> a instanceof VBox);
             this.pane.getChildren().add(diffSelect);
-        }, BUTTON_WIDTH, BUTTON_HEIGHT, FONT_SIZE_MEDIUM);
+        });
         menu.getChildren().add(back);
         return menu;
     }
 
+    private TextField getStyledTextField(String prompt) {
+        TextField field = new TextField();
+        field.setStyle(MinesweeperStyle.textFieldStyle());
+        field.setPromptText(prompt);
+        field.setFont(MinesweeperStyle.smallFont());
+        field.setMaxWidth(MinesweeperStyle.buttonWidth());
+        return field;
+    }
+
     private VBox getCustomMenu() {
         Text text = new Text("CUSTOM LEVEL");
-        text.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_LARGE));
-        TextField widthField = new TextField();
-        widthField.setPromptText("Width");
-        widthField.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_SMALL));
-        TextField heightField = new TextField();
-        heightField.setPromptText("Height");
-        heightField.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_SMALL));
-        TextField bombsField = new TextField();
-        bombsField.setPromptText("Bombs");
-        bombsField.setFont(FontManager.getFont("digital-7/digital-7.ttf", FONT_SIZE_SMALL));
-
-        widthField.setMaxWidth(BUTTON_WIDTH);
-        heightField.setMaxWidth(BUTTON_WIDTH);
-        bombsField.setMaxWidth(BUTTON_WIDTH);
+        text.setFill(MinesweeperStyle.titleColor());
+        text.setFont(MinesweeperStyle.largeFont());
+        TextField widthField = getStyledTextField("Width");
+        TextField heightField = getStyledTextField("Height");
+        TextField bombsField = getStyledTextField("Bombs");
 
         BeveledButton back = new BeveledButton("Back", () -> {
             this.pane.getChildren().removeIf(a -> a instanceof VBox);
             this.pane.getChildren().add(diffSelect);
-        }, BUTTON_WIDTH, BUTTON_HEIGHT, FONT_SIZE_MEDIUM);
+        });
 
         BeveledButton start = new BeveledButton("Start", () -> {
             try {
                 int width = Integer.parseInt(widthField.getText());
                 int height = Integer.parseInt(heightField.getText());
                 int bombs = Integer.parseInt(bombsField.getText());
-                if (width < 9 || height < 9 || bombs < 1 || bombs > width * height - 1) {
+                if (width < 9 || height < 9 || bombs < 1) {
                     throw new NumberFormatException();
+                } else if (bombs > width * height - 1) {
+                    System.err.println("* Too many bombs *");
                 }
                 this.game.loadLevel(new MinesweeperLevel(game, width, height, bombs));
                 this.game.unpause();
             } catch (NumberFormatException ex) {
-                System.out.println("Invalid input");
+                System.err.println("Invalid input: width & height must be >= 9, and bombs must be >= 1");
             }
-        }, BUTTON_WIDTH, BUTTON_HEIGHT, FONT_SIZE_MEDIUM);
+        });
 
-        VBox menu = new VBox(BUTTON_SPACING, text, back, widthField, heightField, bombsField, start);
+        VBox menu = new VBox(MinesweeperStyle.buttonSpacing(), text, start, widthField, heightField, bombsField,
+                back);
         menu.setAlignment(Pos.CENTER);
+        menu.setMaxWidth(MinesweeperStyle.buttonWidth());
 
         return menu;
     }

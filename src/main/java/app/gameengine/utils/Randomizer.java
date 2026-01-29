@@ -5,6 +5,9 @@ import java.util.Random;
 
 import app.gameengine.model.physics.Vector2D;
 
+/**
+ * Wrapper class for performing random operations.
+ */
 public class Randomizer {
 
     private static Random random = new Random();
@@ -35,7 +38,7 @@ public class Randomizer {
      */
     public static <T> T randomSelect(ArrayList<T> list) {
         if (list.isEmpty()) {
-            throw new IllegalArgumentException("list must contain at least one element");
+            throw new IllegalArgumentException("List argument must contain at least one element");
         }
         return list.get(random.nextInt(list.size()));
     }
@@ -54,7 +57,7 @@ public class Randomizer {
      */
     public static <T> T randomSelect(ArrayList<T> list, ArrayList<T> exceptions) {
         if (list.isEmpty()) {
-            throw new IllegalArgumentException("list must contain at least one element");
+            throw new IllegalArgumentException("List argument must contain at least one element");
         }
         ArrayList<T> candidates = new ArrayList<>(list);
         candidates.removeAll(exceptions);
@@ -76,7 +79,7 @@ public class Randomizer {
      */
     public static <T> T randomSelect(T[] array) {
         if (array.length == 0) {
-            throw new IllegalArgumentException("array must contain at least one element");
+            throw new IllegalArgumentException("Array argument must contain at least one element");
         }
         return array[random.nextInt(array.length)];
     }
@@ -157,16 +160,16 @@ public class Randomizer {
     /**
      * Creates a copy of an {@code ArrayList} and shuffles the contents.
      *
+     * @param <T>      the type of the original {@code ArrayList}.
      * @param original the {@code ArrayList} to be copied and shuffled.
      * @return a copy of the original {@code ArrayList} that is also shuffled.
-     * @param <T> the type of the original {@code ArrayList}.
      */
     public static <T> ArrayList<T> shuffleArrayList(ArrayList<T> original) {
         ArrayList<T> newList = new ArrayList<>(original);
-        for (int i = original.size() - 1; i > 0; i--) {
+        for (int i = newList.size() - 1; i > 0; i--) {
             int index = random.nextInt(i + 1);
             T temp = newList.get(index);
-            newList.set(index, original.get(i));
+            newList.set(index, newList.get(i));
             newList.set(i, temp);
         }
         return newList;
@@ -196,22 +199,28 @@ public class Randomizer {
      * positive components.
      * <p>
      * Since the generated vectors have integer components, so should the list of
-     * exceptions. If the list of exceptions contains all possible generated
-     * vectors, this method is not guaranteed to terminate.
+     * exceptions. If the list of exceptions contains all vectors within the bounds,
+     * this method will return null.
      * 
      * @param upperBounds the upper limits (exclusive) of the X and Y components of
      *                    the returned vector
      * @param exceptions  the list of exceptions
-     * @return a random vector not contained within the exceptions
+     * @return a random vector with integer components not contained within the
+     *         exceptions
      * @throws IllegalArgumentException if X and Y components of {@code upperBounds}
      *                                  are not both positive
      */
     public static Vector2D randomIntVector2D(Vector2D upperBounds, ArrayList<Vector2D> exceptions) {
-        Vector2D candidate = randomIntVector2D(upperBounds);
-        while (exceptions.contains(candidate)) {
-            candidate = randomIntVector2D(upperBounds);
+        if (upperBounds.getX() <= 0 || upperBounds.getY() <= 0) {
+            throw new IllegalArgumentException("Both components of upperBounds argument must be positive");
         }
-        return candidate;
+        ArrayList<Vector2D> candidates = new ArrayList<>();
+        for (int i = 0; i < upperBounds.getX(); i++) {
+            for (int j = 0; j < upperBounds.getY(); j++) {
+                candidates.add(new Vector2D(i, j));
+            }
+        }
+        return randomSelect(candidates, exceptions);
     }
 
 }

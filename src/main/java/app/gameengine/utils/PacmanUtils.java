@@ -43,6 +43,27 @@ public class PacmanUtils {
     }
 
     /**
+     * Returns whether a ghost is allowed to take action given its current state.
+     * Actions include chasing, scattering, fleeing, and returning home. A ghost may
+     * act if two things are true:
+     * <p>
+     * 1) They are either near the center of their current tile, or they are not
+     * moving, and
+     * <p>
+     * 2) The last whole tile they were on is either null or they are closer to
+     * another tile than that tile.
+     * 
+     * @param ghost    the ghost
+     * @param dt       the time elapsed since the last update, in seconds
+     * @param lastTile the last whole tile the ghost was on
+     * @return whether the ghost is allowed to act
+     */
+    public static boolean canAct(Ghost ghost, double dt, Vector2D lastTile) {
+        return (PacmanUtils.isNearTile(ghost, dt) || ghost.getVelocity().equals(new Vector2D(0, 0)))
+                && (lastTile == null || !Vector2D.round(ghost.getLocation()).equals(lastTile));
+    }
+
+    /**
      * Returns the vector within the level that this ghost is attempting to reach
      * when in chase mode, depending on their color.
      * 
@@ -96,6 +117,9 @@ public class PacmanUtils {
      * @return the vector being targeted
      */
     public static Vector2D getScatterTarget(PacmanLevel level, Ghost ghost) {
+        if (Vector2D.euclideanDistance(ghost.getLocation(), level.getGhostHouse().getLocation()) < 3) {
+            return Vector2D.add(level.getGhostHouse().getLocation(), new Vector2D(0, -4));
+        }
         switch (ghost.getColor()) {
             default:
             case "Red":

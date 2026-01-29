@@ -2,6 +2,7 @@ package app.gameengine.model.physics;
 
 import java.util.ArrayList;
 
+import app.Settings;
 import app.gameengine.Level;
 import app.gameengine.model.gameobjects.DynamicGameObject;
 import app.gameengine.model.gameobjects.StaticGameObject;
@@ -42,7 +43,7 @@ public class PhysicsEngine {
      * @param object the object being updated
      */
     public void updateObject(double dt, DynamicGameObject object) {
-        
+
     }
 
     /**
@@ -62,6 +63,9 @@ public class PhysicsEngine {
      * Returns the minimum overlapping distance of two hitboxes. If the hitboxes are
      * colliding, this distance should be greater than 0. Otherwise, they are not
      * colliding.
+     * <p>
+     * This method assumes that the hitboxes are already colliding, and the results
+     * are undefined otherwise.
      * 
      * @param hitbox1 the first hitbox
      * @param hitbox2 the second hitbox
@@ -84,8 +88,14 @@ public class PhysicsEngine {
 
         for (int i = 0; i < dynamicObjects.size(); i++) {
             DynamicGameObject object1 = dynamicObjects.get(i);
+            if (Settings.noclip() && object1.isPlayer()) {
+                continue;
+            }
             for (int j = i + 1; j < dynamicObjects.size(); j++) {
                 DynamicGameObject object2 = dynamicObjects.get(j);
+                if (Settings.noclip() && object2.isPlayer()) {
+                    continue;
+                }
                 if (detectCollision(object1.getHitbox(), object2.getHitbox())) {
                     object1.collideWithDynamicObject(object2);
                     object2.collideWithDynamicObject(object1);
@@ -100,5 +110,4 @@ public class PhysicsEngine {
             }
         }
     }
-
 }

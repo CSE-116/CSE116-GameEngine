@@ -24,7 +24,7 @@ public abstract class DynamicGameObject extends GameObject {
     protected int hp;
     private boolean isOnGround = false;
     private final Vector2D velocity = new Vector2D(0.0, 0.0);
-    private final Vector2D orientation = new Vector2D(0.0, 1.0);
+    private final Vector2D orientation = new Vector2D(0.0, 0.0);
 
     /**
      * Constructs a player with the given location and max HP.
@@ -54,7 +54,7 @@ public abstract class DynamicGameObject extends GameObject {
         projectile.setOrientation(orientation.getX(), orientation.getY());
         projectile.setLocation(this.getLocation().getX() + orientation.getX(),
                 this.getLocation().getY() + orientation.getY());
-        level.getDynamicObjects().add(projectile);
+        level.addDynamicObject(projectile);
         AudioManager.playSoundEffect("shoot.wav");
     }
 
@@ -135,10 +135,22 @@ public abstract class DynamicGameObject extends GameObject {
         this.hp -= damage;
     }
 
+    /**
+     * Returns a boolean representing whether the object is currently on the ground.
+     * No calculations are performed to determine this, and that must be handled
+     * elsewhere.
+     * 
+     * @return {@code true} is the object is on the ground, {@code false} otherwise
+     */
     public boolean isOnGround() {
         return isOnGround;
     }
 
+    /**
+     * Sets whether the object is currently on the ground.
+     * 
+     * @param onGround whether the object is on the ground
+     */
     public void setOnGround(boolean onGround) {
         isOnGround = onGround;
     }
@@ -163,6 +175,7 @@ public abstract class DynamicGameObject extends GameObject {
         super.reset();
         this.hp = maxHP;
         this.setVelocity(0, 0);
+        this.setOrientation(0, 0);
         this.isOnGround = false;
     }
 

@@ -1,5 +1,6 @@
 package app;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,15 +21,16 @@ import java.util.zip.ZipOutputStream;
 public class Zipper {
 
     /**
-     * Controls whether each filename is printed as its compressed. Set to
+     * Controls whether each filename is printed as it's compressed. Set to
      * {@code false} to disable.
      */
     private static boolean verbose = true;
 
     /**
-     * List of directories that will have their contents compressed.
+     * List of files and directories that will have their contents compressed.
      */
-    private static String[] sources = { "data/levels", "src" };
+    private static String[] sources = { "data/levels", "src", "pom.xml", "data/sprites/fallback",
+            "data/backgrounds/fallback", "data/icons/default.png" };
 
     /**
      * Name of the compressed file that will be created. If a file already exists
@@ -46,11 +48,15 @@ public class Zipper {
         System.out.printf("\n*** Zipping project to \"%s\" ***\n", zipPath);
 
         if (Files.exists(Paths.get(zipPath))) {
-            System.out.printf("* File \"%s\" already exists. Overwriting *\n", zipPath);
+            System.out.printf("* Output file \"%s\" already exists. Overwriting *\n", zipPath);
         }
 
         try (ZipOutputStream zipFile = new ZipOutputStream(new FileOutputStream(zipPath))) {
             for (String src : sources) {
+                if (!new File(src).exists()) {
+                    System.out.printf("* Source \"%s\" does not exist. Skipping * \n", src);
+                    continue;
+                }
                 for (Path path : Files.walk(Paths.get(src)).filter(f -> !Files.isDirectory(f)).toList()) {
                     if (verbose) {
                         System.out.println(path);
@@ -62,7 +68,7 @@ public class Zipper {
                 }
             }
         } catch (IOException e) {
-            System.out.println("\n*** Project unable to be compressed ***\n");
+            System.err.println("\n*** Project unable to be compressed ***\n");
             throw e;
         }
 

@@ -5,6 +5,11 @@ import java.util.Arrays;
 
 import app.display.common.SpriteLocation;
 
+/**
+ * A pellet in Pacman which allows the player to eat ghosts.
+ * 
+ * @see Pellet
+ */
 public class PowerPellet extends Pellet {
 
     public PowerPellet(double x, double y, PacmanGame game) {

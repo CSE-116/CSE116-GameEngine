@@ -24,7 +24,9 @@ public class Settings {
     }
 
     private static boolean showHitboxes = false;
+    private static boolean showPaths = false;
     private static boolean godMode = false;
+    private static boolean noclip = false;
     private static boolean paused = false;
 
     /**
@@ -56,6 +58,34 @@ public class Settings {
     }
 
     /**
+     * Returns whether the paths of {@code Agent}s are shown.
+     *
+     * @return {@code true} if paths are shown, {@code false} otherwise
+     */
+    public static boolean showPaths() {
+        return Settings.showPaths;
+    }
+
+    /**
+     * Sets whether the paths of {@code Agent}s are shown.
+     *
+     * @param paused {@code true} to show paths, {@code false} to hide paths
+     */
+    public static void setShowPaths(boolean showPaths) {
+        Settings.showPaths = showPaths;
+    }
+
+    /**
+     * Toggles the path display setting.
+     * <p>
+     * If {@code Agent} paths are currently shown, they will be hidden; if hidden,
+     * they will be shown.
+     */
+    public static void toggleShowPaths() {
+        Settings.showPaths = !Settings.showPaths;
+    }
+
+    /**
      * Returns whether god mode is enabled.
      *
      * @return {@code true} if god mode is enabled, {@code false} otherwise
@@ -81,6 +111,34 @@ public class Settings {
      */
     public static void toggleGodMode() {
         Settings.godMode = !Settings.godMode;
+    }
+
+    /**
+     * Returns whether noclip is enabled.
+     *
+     * @return {@code true} if noclip is enabled, {@code false} otherwise
+     */
+    public static boolean noclip() {
+        return Settings.noclip;
+    }
+
+    /**
+     * Sets whether noclip is enabled.
+     *
+     * @param enabled {@code true} to enable noclip, {@code false} to disable it
+     */
+    public static void setNoclip(boolean enabled) {
+        Settings.noclip = enabled;
+    }
+
+    /**
+     * Toggles the noclip setting.
+     * <p>
+     * If noclip is currently enabled, it will be disabled; if disabled, it will
+     * be enabled.
+     */
+    public static void toggleNoclip() {
+        Settings.noclip = !Settings.noclip;
     }
 
     /**

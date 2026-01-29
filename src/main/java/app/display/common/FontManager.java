@@ -107,7 +107,7 @@ public class FontManager {
                 loadedFonts.put(fileName, family);
                 return Font.font(family, weight, posture, size);
             } catch (FileNotFoundException e) {
-                System.out.println("** Invalid font or file cannot be found " + fileName + ". Using system default **");
+                System.err.println("** Invalid font or file cannot be found " + fileName + ". Using system default **");
                 return new Font(size);
             }
         }

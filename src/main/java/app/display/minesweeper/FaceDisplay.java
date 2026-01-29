@@ -5,6 +5,7 @@ import app.display.common.SpriteGraphics;
 import app.display.common.ui.UIElement;
 import app.gameengine.Level;
 import app.games.minesweeper.Face;
+import app.games.minesweeper.MinesweeperGame;
 import app.games.minesweeper.MinesweeperLevel;
 import app.games.minesweeper.MinesweeperLevel.GameState;
 import javafx.geometry.Pos;

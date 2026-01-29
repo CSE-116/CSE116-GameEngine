@@ -16,7 +16,7 @@ import app.gameengine.utils.Timer;
  * 
  * @see Level
  * @see Snake
- * @see Food
+ * @see SnakeFood
  */
 public class SnakeLevel extends Level {
 
@@ -35,9 +35,9 @@ public class SnakeLevel extends Level {
             int numFood) {
         super(game, new PhysicsEngine(), size, size, name);
         this.timer = timer;
-        this.lengthIncrease = lengthIncrease;
-        this.startingLength = startingLength;
-        this.numFood = numFood;
+        this.lengthIncrease = Math.min(lengthIncrease, size * size - startingLength);
+        this.startingLength = Math.min(startingLength, size * size);
+        this.numFood = Math.min(numFood, size * size - 2);
         this.keyboardControls = new SnakeControls(game);
         this.setBackground(new Background("snake/snakeColors.png", 3, 0));
     }
@@ -102,18 +102,21 @@ public class SnakeLevel extends Level {
     }
 
     /**
-     * Update the entire level according to the amount of time that has elapsed
-     * since the last frame. Updates specific to snake only occur according to a
-     * central timer based on movement speed. If this update does occur, keyboard
-     * input is processed, and tail and player locations are adjusted accordingly.
+     * Move each segment of the snake forward in its direction of travel by one
+     * tile, including both body segments and the head of the snake.
      */
+    private void moveSnake() {
+
+    }
+
     @Override
     public void update(double dt) {
         this.food.removeIf(SnakeFood::isDestroyed);
         this.tail.removeIf(SnakeBody::isDestroyed);
         // Move body
-        if (this.timer.tick(dt)) {
-            // Update snake head and tail locations
+        if (this.timer.tick(dt) > 0) {
+            this.keyboardControls.processInput(0);
+            this.moveSnake();
         }
         super.update(dt);
     }
@@ -127,12 +130,10 @@ public class SnakeLevel extends Level {
         this.tail.clear();
 
         this.spawnSnake();
-        // Spawn food
         for (int i = 0; i < this.numFood; i++) {
             this.spawnFood();
         }
         this.wallOffBoundary();
-        this.game.pause();
     }
 
     @Override
@@ -142,7 +143,7 @@ public class SnakeLevel extends Level {
 
     @Override
     public String getUIString() {
-        return "Score: " + this.getPlayer().getHP();
+        return String.format("Score: %.0f", this.score);
     }
 
 }

@@ -2,6 +2,12 @@ package app.games.commonobjects;
 
 import app.display.common.SpriteLocation;
 
+/**
+ * A low damage projectile which only damages enemies.
+ * 
+ * @see Projectile
+ * @see MagicPickup
+ */
 public class PlayerMagicProjectile extends Projectile {
 
     public PlayerMagicProjectile(double x, double y) {

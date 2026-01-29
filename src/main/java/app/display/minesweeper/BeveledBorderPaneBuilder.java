@@ -1,6 +1,5 @@
 package app.display.minesweeper;
 
-import app.Configuration;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 
@@ -16,10 +15,10 @@ import javafx.scene.paint.Color;
 public class BeveledBorderPaneBuilder {
 
     private Node content;
-    private double bevelThickness = 1.5 * Configuration.ZOOM;
-    private Color backgroundColor = Color.BLACK;
-    private Color topLeftColor = Color.WHITE.deriveColor(0, 1, 0.25, 1);
-    private Color bottomRightColor = Color.WHITE.deriveColor(0, 1, 0.5, 1);
+    private double bevelThickness = MinesweeperStyle.uiBorderSize();
+    private Color backgroundColor = MinesweeperStyle.uiBgColor();
+    private Color topLeftColor = MinesweeperStyle.uiDarkColor();
+    private Color bottomRightColor = MinesweeperStyle.uiLightColor();
 
     /**
      * Constructs a builder for a {@link BeveledBorderPane} with the given content

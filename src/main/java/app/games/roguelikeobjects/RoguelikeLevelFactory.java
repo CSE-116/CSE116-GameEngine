@@ -21,7 +21,7 @@ public class RoguelikeLevelFactory {
     private static RoguelikeLevel getLevel(Game game, String directory) {
         if (LevelParser.parseLevel(game, directory) instanceof RoguelikeLevel level)
             return level;
-        System.out.println("** Level file " + directory + " could not be found or was not a RoguelikeLevel **");
+        System.err.println("** Level file " + directory + " could not be found or was not a RoguelikeLevel **");
         return null;
     }
 

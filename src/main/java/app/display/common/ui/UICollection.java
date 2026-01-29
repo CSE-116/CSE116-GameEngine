@@ -26,7 +26,6 @@ public class UICollection {
      *
      * @param elements a map of element names to UIElement instances
      */
-    @SuppressWarnings("unused")
     public UICollection(HashMap<String, UIElement> elements) {
         this.elements = elements;
         this.elements.forEach((k, v) -> this.UIPane.getChildren().add(v.getRenderable()));
@@ -81,7 +80,6 @@ public class UICollection {
      * @param dt    the time elapsed since the last update, in seconds
      * @param level the current game level
      */
-    @SuppressWarnings("unused")
     public void update(double dt, Level level) {
         this.elements.forEach((k, v) -> v.update(dt, level));
     }

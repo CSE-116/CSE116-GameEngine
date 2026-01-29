@@ -5,9 +5,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import app.display.common.SpriteLocation;
-import app.games.platformerobjects.PlatformerWall;
+import app.games.commonobjects.Wall;
 
-public class QuestionBlock extends PlatformerWall {
+/**
+ * A block in Mario which gives powerups when jumped into from below.
+ * <p>
+ * Note that this block does not actually give powerups, and is
+ * indistinguishable from the other kinds of blocks except in appearance.
+ * 
+ * @see Wall
+ * @see MarioLevel
+ * @see MarioGame
+ */
+public class QuestionBlock extends Wall {
 
     public QuestionBlock(double x, double y) {
         super(x, y);

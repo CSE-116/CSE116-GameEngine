@@ -15,6 +15,17 @@ import app.gameengine.utils.Timer;
 import app.games.topdownobjects.TopDownLevel;
 import javafx.scene.paint.Color;
 
+/**
+ * A level within a game of Pacman.
+ * <p>
+ * Controls main game logic, including global ghost states and pellet and score
+ * tracking.
+ * 
+ * @see PacmanGame
+ * @see Ghost
+ * @see TopDownLevel
+ * @see Level
+ */
 public class PacmanLevel extends TopDownLevel {
 
     public enum GameState {
@@ -45,14 +56,13 @@ public class PacmanLevel extends TopDownLevel {
         return this.walls;
     }
 
-    @SuppressWarnings("unused")
     public void eatPellet(boolean powerPellet) {
         this.pelletsEaten++;
         this.pelletsLeft--;
         this.score += powerPellet ? 50 : 10;
-        if (this.pelletsEaten == 10) {
+        if (this.pelletsEaten == 20) {
             this.ghostHouse.getGhosts().get("Pink").setState("Chase");
-        } else if (this.pelletsEaten == 30) {
+        } else if (this.pelletsEaten == 40) {
             this.ghostHouse.getGhosts().get("Cyan").setState("Chase");
         } else if (this.pelletsEaten == 70) {
             // Spawn fruit
@@ -82,7 +92,7 @@ public class PacmanLevel extends TopDownLevel {
         double scoreIncrease = 200 * scoreMultiplier;
         this.getActiveEffects()
                 .put(new SimpleTextEffect(String.format("%.0f", scoreIncrease), 2,
-                        FontManager.getFont("Minecraft.ttf", Configuration.ZOOM * 15), Color.CYAN),
+                        FontManager.getFont("Minecraft.ttf", Configuration.TEXT_SCALE * 15), Color.CYAN),
                         ghost.getLocation().copy());
 
         this.score += scoreIncrease;
@@ -120,7 +130,6 @@ public class PacmanLevel extends TopDownLevel {
         this.dynamicObjects.addAll(this.ghostHouse.getGhosts().values());
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void update(double dt) {
         super.update(dt);
@@ -128,7 +137,7 @@ public class PacmanLevel extends TopDownLevel {
             firstFrame = false;
             this.game.pause();
         }
-        if (this.gameState == GameState.FRIGHTENED && this.frightenedTimer.tick(dt)) {
+        if (this.gameState == GameState.FRIGHTENED && this.frightenedTimer.tick(dt) > 0) {
             // If frightened time is over, chase
             this.gameState = GameState.CHASE;
             this.ghostHouse.getGhosts().forEach((k, v) -> {
@@ -144,7 +153,7 @@ public class PacmanLevel extends TopDownLevel {
                     v.setAnimationState("frightened_end");
                 }
             });
-        } else if (this.gameState == GameState.CHASE && this.chaseTimer.tick(dt)) {
+        } else if (this.gameState == GameState.CHASE && this.chaseTimer.tick(dt) > 0) {
             // If chase time is over, scatter
             this.gameState = GameState.SCATTER;
             this.ghostHouse.getGhosts().forEach((k, v) -> {
@@ -152,7 +161,7 @@ public class PacmanLevel extends TopDownLevel {
                     v.setState("Scatter");
                 }
             });
-        } else if (this.gameState == GameState.SCATTER && this.scatterTimer.tick(dt)) {
+        } else if (this.gameState == GameState.SCATTER && this.scatterTimer.tick(dt) > 0) {
             // If scatter time is over, chase
             this.gameState = GameState.CHASE;
             this.ghostHouse.getGhosts().forEach((k, v) -> {
@@ -166,7 +175,6 @@ public class PacmanLevel extends TopDownLevel {
         this.teleport();
     }
 
-    @SuppressWarnings("unused")
     private void teleport() {
         ArrayList<Vector2D> locs = new ArrayList<>();
         locs.add(this.getPlayer().getLocation());

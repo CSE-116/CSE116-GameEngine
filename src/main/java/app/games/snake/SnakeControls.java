@@ -15,8 +15,8 @@ import javafx.scene.input.KeyEvent;
  * <p>
  * These are relatively simple controls that maintain velocity in the most
  * recently pressed direction. Upon pressing a new direction, it is queued, and
- * as soon as that is a valid direction of movement it is performed. This allows
- * for quick input of multiple controls, enabling rapid turnaround.
+ * as soon as that is a valid direction of movement it is performed, allowing
+ * for quick turnarounds.
  * 
  * @see KeyboardControls
  * @see SnakeGame

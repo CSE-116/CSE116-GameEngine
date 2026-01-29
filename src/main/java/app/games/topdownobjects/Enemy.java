@@ -40,14 +40,6 @@ public abstract class Enemy extends Agent {
         }
     }
 
-    protected String getDirection() {
-        Vector2D orientation = this.getOrientation().copy();
-        if (Math.abs(orientation.getX()) > Math.abs(orientation.getY())) {
-            return orientation.getX() > 0 ? "right" : "left";
-        }
-        return orientation.getY() > 0 ? "down" : "up";
-    }
-
     public int getStrength() {
         return strength;
     }
@@ -55,13 +47,6 @@ public abstract class Enemy extends Agent {
     @Override
     public void onDestroy() {
         this.getEffects().add(new DeathEffect(this));
-    }
-
-    @Override
-    public void setOrientation(double x, double y) {
-        super.setOrientation(x, y);
-        String anim = "walk_" + this.getDirection();
-        this.setAnimationState(anim);
     }
 
     @Override

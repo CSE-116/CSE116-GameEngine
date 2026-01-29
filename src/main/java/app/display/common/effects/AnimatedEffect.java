@@ -56,7 +56,7 @@ public class AnimatedEffect implements Effect {
 
     @Override
     public Node getFrame(Vector2D origin) {
-        int index = (int) (this.elapsedTime / Configuration.ANIMATION_TIME) % this.frames.size();
+        int index = (int) (this.elapsedTime / this.animationTime) % this.frames.size();
         this.frames.get(index).setLayoutX(origin.getX() * Configuration.SCALE_FACTOR);
         this.frames.get(index).setLayoutY(origin.getY() * Configuration.SCALE_FACTOR);
         return this.frames.get(index);
@@ -67,7 +67,7 @@ public class AnimatedEffect implements Effect {
         if (this.loop) {
             return false;
         }
-        return this.elapsedTime > this.frames.size() * Configuration.ANIMATION_TIME;
+        return this.elapsedTime > this.frames.size() * this.animationTime;
     }
 
     @Override

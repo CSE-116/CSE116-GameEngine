@@ -41,7 +41,7 @@ public class LivesDisplay extends UIElement {
             return;
         }
         this.label = new Label("LIVES: 0");
-        this.label.setFont(FontManager.getFont("Minecraft.ttf", 20 * Configuration.ZOOM));
+        this.label.setFont(FontManager.getFont("Minecraft.ttf", 20 * Configuration.TEXT_SCALE));
 
         this.label.setTextAlignment(TextAlignment.CENTER);
         this.label.setTextFill(Color.WHITE);

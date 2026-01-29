@@ -8,6 +8,14 @@ import app.display.common.SpriteLocation;
 import app.display.common.sound.AudioManager;
 import app.games.platformerobjects.PlatformerPlayer;
 
+/**
+ * The player in a game of Mario. Some kind of plumber or something.
+ * 
+ * @see PlatformerPlayer
+ * @see Player
+ * @see MarioLevel
+ * @see MarioGame
+ */
 public class Mario extends PlatformerPlayer {
 
     public Mario(double x, double y) {
@@ -24,7 +32,7 @@ public class Mario extends PlatformerPlayer {
     @Override
     public void jump() {
         super.jump();
-        AudioManager.playSoundEffect("mario/jump.wav");
+        AudioManager.playSoundEffect("mario/jump.wav", 0.1);
     }
 
     @Override

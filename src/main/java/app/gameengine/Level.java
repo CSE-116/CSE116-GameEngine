@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import app.Settings;
+import app.display.common.Background;
 import app.display.common.controller.BasicMouseControls;
 import app.display.common.controller.KeyboardControls;
 import app.display.common.controller.MouseControls;
-import app.display.common.Background;
 import app.display.common.effects.Effect;
 import app.gameengine.model.gameobjects.DynamicGameObject;
 import app.gameengine.model.gameobjects.GameObject;
@@ -42,6 +42,8 @@ public abstract class Level {
     protected ArrayList<DynamicGameObject> dynamicObjects = new ArrayList<>();
     private ArrayList<StaticGameObject> originalStaticObjects = new ArrayList<>();
     private ArrayList<DynamicGameObject> originalDynamicObjects = new ArrayList<>();
+    private ArrayList<StaticGameObject> staticObjectsToAdd = new ArrayList<>();
+    private ArrayList<DynamicGameObject> dynamicObjectsToAdd = new ArrayList<>();
 
     protected boolean isLoaded;
     protected Vector2D playerStartLocation = new Vector2D(1.0, 1.0);
@@ -181,6 +183,8 @@ public abstract class Level {
         if (!isLoaded) {
             this.originalDynamicObjects = new ArrayList<>(this.dynamicObjects);
             this.originalStaticObjects = new ArrayList<>(this.staticObjects);
+            this.originalDynamicObjects.addAll(dynamicObjectsToAdd);
+            this.originalStaticObjects.addAll(staticObjectsToAdd);
         }
         // Load player
         this.playtime = 0;
@@ -212,6 +216,8 @@ public abstract class Level {
         this.staticObjects.addAll(this.originalStaticObjects);
         this.dynamicObjects.forEach(GameObject::reset);
         this.staticObjects.forEach(GameObject::reset);
+        this.dynamicObjectsToAdd.clear();
+        this.staticObjectsToAdd.clear();
         // Reset player
         this.getPlayer().reset();
         this.getPlayer().setLocation(playerStartLocation.getX(), playerStartLocation.getY());
@@ -265,7 +271,13 @@ public abstract class Level {
     }
 
     /**
-     * Returns all of the {@code StaticGameObject}s currently within the level.
+     * Returns all of the {@code StaticGameObject}s currently within the level. You
+     * generally should not directly modify this list, especially if that operation
+     * happens during game updates (i.e. it's usually fine if it happens during
+     * level setup).
+     * <p>
+     * If you want to add a static object, you should use
+     * {@link #addStaticObject(StaticGameObject)} instead.
      * 
      * @return a list of static objects
      */
@@ -274,12 +286,48 @@ public abstract class Level {
     }
 
     /**
-     * Returns all of the {@code DynamicGameObject}s currently within the level.
+     * Adds the input static object to this level's list during the next update.
+     * This is far safer than modifying the list itself, as returned by
+     * {@link #getStaticObjects()}, and is generally preferred.
+     * 
+     * @param object the object to add
+     */
+    public void addStaticObject(StaticGameObject object) {
+        if (!this.isLoaded) {
+            this.staticObjects.add(object);
+        } else {
+            this.staticObjectsToAdd.add(object);
+        }
+    }
+
+    /**
+     * Returns all of the {@code DynamicGameObject}s currently within the level. You
+     * generally should not directly modify this list, especially if that operation
+     * happens during game updates (i.e. it's usually fine if it happens during
+     * level setup).
+     * <p>
+     * If you want to add a dynamic object, you should use
+     * {@link #addDynamicObject(DynamicGameObject)} instead.
      * 
      * @return a list of dynamic objects
      */
     public ArrayList<DynamicGameObject> getDynamicObjects() {
         return this.dynamicObjects;
+    }
+
+    /**
+     * Adds the input dynamic object to this level's list during the next update.
+     * This is far safer than modifying the list itself, as returned by
+     * {@link #getDynamicObjects()}, and is generally preferred.
+     * 
+     * @param object the object to add
+     */
+    public void addDynamicObject(DynamicGameObject object) {
+        if (!this.isLoaded) {
+            this.dynamicObjects.add(object);
+        } else {
+            this.dynamicObjectsToAdd.add(object);
+        }
     }
 
     /**
@@ -413,8 +461,15 @@ public abstract class Level {
      * 
      * @param dt the time elapsed since the last update, in seconds
      */
-    @SuppressWarnings("unused")
     public void update(double dt) {
+        if (!this.dynamicObjectsToAdd.isEmpty()) {
+            this.dynamicObjects.addAll(this.dynamicObjectsToAdd);
+            this.dynamicObjectsToAdd.clear();
+        }
+        if (!this.staticObjectsToAdd.isEmpty()) {
+            this.staticObjects.addAll(this.staticObjectsToAdd);
+            this.staticObjectsToAdd.clear();
+        }
         this.playtime += dt;
         this.dynamicObjects.removeIf(GameObject::isDestroyed);
         this.staticObjects.removeIf(GameObject::isDestroyed);

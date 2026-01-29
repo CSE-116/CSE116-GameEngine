@@ -29,7 +29,8 @@ public class Collider extends Hitbox {
 
     public boolean checkCollision(PhysicsEngine engine, Level level) {
         for (StaticGameObject obj : level.getStaticObjects()) {
-            if (engine.detectCollision(this, obj.getHitbox()) && this.getLocation().getY() < obj.getLocation().getY()) {
+            if (obj.isSolid() && engine.detectCollision(this, obj.getHitbox())
+                    && this.getLocation().getY() < obj.getLocation().getY()) {
                 return true;
             }
         }

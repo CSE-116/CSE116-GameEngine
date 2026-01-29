@@ -8,6 +8,14 @@ import app.display.common.SpriteLocation;
 import app.display.common.sound.AudioManager;
 import app.gameengine.model.gameobjects.Player;
 
+/**
+ * Player in a game of Pacman
+ * 
+ * @see Player
+ * @see PacmanGame
+ * @see PacmanLevel
+ * @see PacmanControls
+ */
 public class Pacman extends Player {
 
     private int lives = 3;
@@ -78,16 +86,6 @@ public class Pacman extends Player {
 
     @Override
     public int getSpriteWidth() {
-        return 32;
-    }
-
-    @Override
-    public int getSpriteTileHeight() {
-        return 32;
-    }
-
-    @Override
-    public int getSpriteTileWidth() {
         return 32;
     }
 

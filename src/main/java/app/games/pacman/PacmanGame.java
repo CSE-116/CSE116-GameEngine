@@ -6,11 +6,22 @@ import app.display.common.ui.PauseMenu;
 import app.display.pacman.PacmanUI;
 import app.gameengine.Game;
 import app.gameengine.model.physics.Vector2D;
+import app.gameengine.statistics.Scoreboard;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * A game of Pacman.
+ * <p>
+ * Mostly handles UI and overall logic like game resets.
+ * 
+ * @see PacmanLevel
+ * @see Pacman
+ * @see Ghost
+ * @see Game
+ */
 public class PacmanGame extends Game {
 
     private Group fgUI = new Group();
@@ -19,6 +30,8 @@ public class PacmanGame extends Game {
         super();
         this.setPlayer(new Pacman(0, 0));
         this.setIconPath("pacman.png");
+        // uncomment when Scoreboard is completed
+        // this.scoreboard = new Scoreboard(this.getName(), new ScoreComparator());
     }
 
     @Override

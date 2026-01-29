@@ -6,6 +6,12 @@ import app.display.common.SpriteLocation;
 import app.gameengine.model.gameobjects.DynamicGameObject;
 import app.gameengine.model.gameobjects.StaticGameObject;
 
+/**
+ * Spawn point for {@link Ghost}s in Pacman.
+ * 
+ * @see PacmanGame
+ * @see Ghost
+ */
 public class GhostHouse extends StaticGameObject {
 
     private double redOffsetX;

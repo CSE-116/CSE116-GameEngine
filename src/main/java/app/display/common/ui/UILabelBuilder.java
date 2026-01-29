@@ -18,9 +18,9 @@ import javafx.scene.text.Font;
 public class UILabelBuilder {
 
     private String text = "default";
-    private Font font = Font.font(Configuration.ZOOM * 5);
-    private double xOffset = Configuration.ZOOM * 5;
-    private double yOffset = Configuration.ZOOM * 5;
+    private Font font = Font.font(Configuration.DEFAULT_TEXT_SIZE);
+    private double xOffset = Configuration.DEFAULT_TEXT_SIZE;
+    private double yOffset = Configuration.DEFAULT_TEXT_SIZE;
     private Color backgroundColor = Color.WHITE;
     private Color textColor = Color.BLACK;
     private Pos alignment = Pos.TOP_RIGHT;

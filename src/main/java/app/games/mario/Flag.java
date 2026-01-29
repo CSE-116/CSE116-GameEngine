@@ -4,6 +4,13 @@ import app.display.common.SpriteLocation;
 import app.gameengine.Game;
 import app.games.commonobjects.Goal;
 
+/**
+ * A goal in Mario, which transitions the player to the next level.
+ * 
+ * @see Goal
+ * @see MarioLevel
+ * @see MarioGame
+ */
 public class Flag extends Goal {
 
     public Flag(double x, double y, Game game) {
@@ -20,16 +27,6 @@ public class Flag extends Goal {
 
     @Override
     public int getSpriteWidth() {
-        return 24;
-    }
-
-    @Override
-    public int getSpriteTileHeight() {
-        return 176;
-    }
-
-    @Override
-    public int getSpriteTileWidth() {
         return 24;
     }
 

@@ -1,5 +1,6 @@
 package app.display.common;
 
+import app.Configuration;
 import app.gameengine.model.gameobjects.StaticGameObject;
 
 /**
@@ -16,6 +17,9 @@ import app.gameengine.model.gameobjects.StaticGameObject;
  */
 public class BlankTile extends StaticGameObject {
 
+    private int spriteWidth;
+    private int spriteHeight;
+
     /**
      * Constructs a blank tile with the given sprite sheet and location within it.
      * 
@@ -25,7 +29,14 @@ public class BlankTile extends StaticGameObject {
      * @param spriteLocation      the location within the sprite sheet
      */
     public BlankTile(double x, double y, String spriteSheetFilename, SpriteLocation spriteLocation) {
+        this(x, y, spriteSheetFilename, spriteLocation, Configuration.SPRITE_SIZE, Configuration.SPRITE_SIZE);
+    }
+
+    public BlankTile(double x, double y, String spriteSheetFilename, SpriteLocation spriteLocation, int spriteWidth,
+            int spriteHeight) {
         super(x, y);
+        this.spriteWidth = spriteWidth;
+        this.spriteHeight = spriteHeight;
         this.spriteSheetFilename = spriteSheetFilename;
         this.defaultSpriteLocation = spriteLocation;
     }
@@ -33,6 +44,16 @@ public class BlankTile extends StaticGameObject {
     @Override
     public boolean isSolid() {
         return false;
+    }
+
+    @Override
+    public int getSpriteWidth() {
+        return this.spriteWidth;
+    }
+
+    @Override
+    public int getSpriteHeight() {
+        return this.spriteHeight;
     }
 
 }

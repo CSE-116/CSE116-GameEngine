@@ -1,9 +1,15 @@
 package app.games.mario;
 
 import app.display.common.SpriteLocation;
-import app.games.platformerobjects.PlatformerWall;
+import app.games.commonobjects.Wall;
 
-public class PipeEnd extends PlatformerWall {
+/**
+ * The end of a pipe in Mario.
+ * 
+ * @see PipeStem
+ * @see Wall
+ */
+public class PipeEnd extends Wall {
 
     public PipeEnd(double x, double y) {
         super(x, y);

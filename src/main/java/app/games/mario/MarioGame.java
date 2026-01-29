@@ -4,6 +4,11 @@ import app.gameengine.LevelParser;
 import app.gameengine.LinearGame;
 import app.gameengine.Level;
 
+/**
+ * A game of Mario.
+ * <p>
+ * This class does nothing complicated, and really just stores levels.
+ */
 public class MarioGame extends LinearGame {
 
     public MarioGame() {

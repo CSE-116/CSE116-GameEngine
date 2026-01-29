@@ -1,11 +1,12 @@
 package app.gameengine.model.datastructures;
 
 /**
- * Basic generic comparator class.
+ * Basic generic comparator interface.
  * <p>
- * This class is intended to be extended to allow for more specific comparisons.
+ * This interface is intended to be implemented to by other classes for
+ * comparisons.
  */
-public class Comparator<T> {
+public interface Comparator<T> {
 
     /**
      * Returns whether the first object comes before the second object, according to
@@ -15,8 +16,6 @@ public class Comparator<T> {
      * @param b the second object
      * @return {@code true} if the first object comes first, {@code false} otherwise
      */
-    public boolean compare(T a, T b) {
-        return false;
-    }
+    boolean compare(T a, T b);
 
 }

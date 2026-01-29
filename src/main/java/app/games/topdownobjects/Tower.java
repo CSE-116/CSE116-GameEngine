@@ -40,4 +40,9 @@ public class Tower extends Agent {
             otherObject.takeDamage(5);
         }
     }
+
+    @Override
+    public boolean isSolid() {
+        return true;
+    }
 }

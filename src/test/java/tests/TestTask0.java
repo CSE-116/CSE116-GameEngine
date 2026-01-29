@@ -1,5 +1,4 @@
 package tests;
-// package app.tests;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import app.display.common.Background;
-import app.display.minesweeper.MinesweeperGame;
 import app.gameengine.Level;
 import app.gameengine.LevelParser;
 import app.gameengine.model.gameobjects.DynamicGameObject;
@@ -24,6 +22,7 @@ import app.games.SampleGame;
 import app.games.commonobjects.Goal;
 import app.games.commonobjects.InfoNode;
 import app.games.commonobjects.Wall;
+import app.games.minesweeper.MinesweeperGame;
 import app.games.minesweeper.MinesweeperLevel;
 import app.games.topdownobjects.Demon;
 import app.games.topdownobjects.TopDownLevel;
@@ -32,8 +31,6 @@ import app.games.topdownobjects.Tower;
 public class TestTask0 {
 
     private static double EPSILON = 1e-5;
-
-    // ---------------------------- Helper methods ----------------------------
 
     private static void compareBackgrounds(Background bg1, Background bg2) {
         assertEquals(bg1.usesBackgroundImage(), bg2.usesBackgroundImage());
@@ -95,8 +92,6 @@ public class TestTask0 {
         }
     }
 
-    // ------------------------------- LO tests -------------------------------
-
     @Test
     public void testParseLevelNoFile() {
         SampleGame game = new SampleGame();
@@ -108,6 +103,7 @@ public class TestTask0 {
     public void testParseLevelTiny() {
         SampleGame game = new SampleGame();
         Level level = LevelParser.parseLevel(game, "testing/small.csv");
+        level.update(0); // To finish adding static/dynamic objects
         // Level properties
         assertNotNull(level);
         assertEquals(5, level.getWidth());
@@ -127,6 +123,7 @@ public class TestTask0 {
     public void testParseLevelSmall() {
         SampleGame game = new SampleGame();
         Level level = LevelParser.parseLevel(game, "testing/medium.csv");
+        level.update(0); // To finish adding static/dynamic objects
         // Level properties
         assertNotNull(level);
         assertEquals(12, level.getWidth());
@@ -153,6 +150,7 @@ public class TestTask0 {
     public void testParseLevelBig() {
         SampleGame game = new SampleGame();
         Level level = LevelParser.parseLevel(game, "testing/large.csv");
+        level.update(0); // To finish adding static/dynamic objects
         // Level properties
         assertNotNull(level);
         assertEquals(200, level.getWidth());
@@ -190,6 +188,7 @@ public class TestTask0 {
     public void testParseLevelWithBadObjects() {
         SampleGame game = new SampleGame();
         Level level = LevelParser.parseLevel(game, "testing/bad.csv");
+        level.update(0); // To finish adding static/dynamic objects
         // Level properties
         assertNotNull(level);
         assertEquals(50, level.getWidth());
@@ -211,8 +210,6 @@ public class TestTask0 {
         assertFalse(actualDynamic.contains(null));
         compareListsOfDynamicObjects(expectedDynamic, actualDynamic);
     }
-
-    // ------------------------------- AO tests -------------------------------
 
     @Test
     public void testGetAdjacentVectors() {

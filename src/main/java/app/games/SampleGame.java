@@ -30,8 +30,18 @@ public class SampleGame extends Game {
 
     @Override
     public void advanceLevel() {
+        if (level > 5) {
+            return;
+        }
         this.loadLevel(LevelParser.parseLevel(this, "sample/sample" + level + ".csv"));
         level++;
+    }
+
+    @Override
+    public void resetGame() {
+        super.resetGame();
+        this.loadLevel(LevelParser.parseLevel(this, "sample/sample1.csv"));
+        this.level = 2;
     }
 
     @Override

@@ -7,6 +7,7 @@ import app.Configuration;
 import app.Settings;
 import app.display.common.ui.PauseMenu;
 import app.display.common.ui.UICollection;
+import app.display.common.ui.UIElement;
 import app.display.common.ui.UIHealthBar;
 import app.display.common.ui.UILabel;
 import app.gameengine.model.gameobjects.Player;
@@ -37,10 +38,11 @@ public abstract class Game {
     private Player player;
     protected Level currentLevel;
     protected UICollection UI;
-    protected Scoreboard scoreboard = new Scoreboard(this.getName());
+    protected Scoreboard scoreboard;
+    protected UIElement pauseMenu = new PauseMenu(this);
 
-    private boolean advanceLevel;
-    private String changeLevel = "";
+    private boolean shouldAdvanceLevel;
+    private String shouldChangeLevel = "";
 
     /**
      * Create a new game, with a {@link Player} as the player.
@@ -100,8 +102,8 @@ public abstract class Game {
      * called most recently will take effect.
      */
     public void markAdvanceLevel() {
-        this.advanceLevel = true;
-        this.changeLevel = "";
+        this.shouldAdvanceLevel = true;
+        this.shouldChangeLevel = "";
     }
 
     /**
@@ -129,8 +131,8 @@ public abstract class Game {
      * called most recently will take effect.
      */
     public void markChangeLevel(String name) {
-        this.changeLevel = name;
-        this.advanceLevel = false;
+        this.shouldChangeLevel = name;
+        this.shouldAdvanceLevel = false;
     }
 
     /**
@@ -233,12 +235,12 @@ public abstract class Game {
         if (Settings.paused()) {
             return;
         }
-        if (this.advanceLevel) {
-            this.advanceLevel = false;
+        if (this.shouldAdvanceLevel) {
+            this.shouldAdvanceLevel = false;
             this.advanceLevel();
-        } else if (!this.changeLevel.equals("")) {
-            this.changeLevel(this.changeLevel);
-            this.changeLevel = "";
+        } else if (!this.shouldChangeLevel.equals("")) {
+            this.changeLevel(this.shouldChangeLevel);
+            this.shouldChangeLevel = "";
         }
         this.currentLevel.update(dt);
         this.UI.update(dt, this.currentLevel);
@@ -272,7 +274,8 @@ public abstract class Game {
         Settings.setPaused(true);
         if (this.UI != null) {
             this.UI.removeElement("pause");
-            this.UI.addElement("pause", new PauseMenu(this));
+            this.UI.addElement("pause", this.pauseMenu);
+            this.pauseMenu.update(0, currentLevel);
         }
     }
 

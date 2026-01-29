@@ -3,6 +3,11 @@ package app.games.commonobjects;
 import app.display.common.SpriteLocation;
 import app.gameengine.model.gameobjects.StaticGameObject;
 
+/**
+ * An instant-death spike obstacle.
+ * 
+ * @see StaticGameObject
+ */
 public class Spike extends StaticGameObject {
 
     public Spike(double x, double y) {

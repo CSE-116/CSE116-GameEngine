@@ -111,8 +111,13 @@ public abstract class GameObject implements RenderableAsSprite, Collidable {
      * @return a reference to the graphical dimensions of this object
      */
     public Vector2D getSpriteDimensions() {
-        return new Vector2D((double) getSpriteWidth() / Configuration.SPRITE_SIZE,
-                (double) getSpriteHeight() / Configuration.SPRITE_SIZE);
+        return new Vector2D(getSpriteWidth() * this.getSpriteScaleX() / Configuration.SPRITE_SIZE,
+                getSpriteHeight() * this.getSpriteScaleY() / Configuration.SPRITE_SIZE);
+    }
+
+    public Vector2D getSpriteOrigin() {
+        return new Vector2D(this.location.getX() + this.getSpriteOffsetX() / (double) Configuration.SPRITE_SIZE,
+                this.location.getY() + this.getSpriteOffsetY() / (double) Configuration.SPRITE_SIZE);
     }
 
     /**
@@ -179,6 +184,9 @@ public abstract class GameObject implements RenderableAsSprite, Collidable {
         if (!this.isPlayer()) {
             this.setLocation(startingLocation.getX(), startingLocation.getY());
         }
+        this.timeInAnimationState = 0;
+        this.animationState = "default";
+        this.freezeAnimations = false;
         this.onSpawn();
     }
 
@@ -322,7 +330,6 @@ public abstract class GameObject implements RenderableAsSprite, Collidable {
     public void setAnimationState(String newState) {
         if (!this.animationState.equals(newState) && this.animations.containsKey(newState)) {
             this.animationState = newState;
-            this.timeInAnimationState = 0.0;
         }
         this.freezeAnimations = false;
     }

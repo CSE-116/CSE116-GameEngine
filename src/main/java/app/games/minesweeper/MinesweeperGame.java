@@ -1,12 +1,15 @@
-package app.display.minesweeper;
+package app.games.minesweeper;
 
 import app.Configuration;
 import app.Settings;
+import app.display.minesweeper.BeveledBorderPaneBuilder;
+import app.display.minesweeper.MinesweeperMenu;
+import app.display.minesweeper.MinesweeperStyle;
+import app.display.minesweeper.MinesweeperUI;
 import app.gameengine.Game;
 import app.gameengine.model.physics.Vector2D;
-import app.games.minesweeper.MinesweeperLevel;
+import app.gameengine.statistics.Scoreboard;
 import app.games.minesweeper.MinesweeperLevel.GameState;
-import app.games.minesweeper.NotPlayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -23,13 +26,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Game for playing Minesweeper.
+ * <p>
+ * The majority of this class is devoted to setting up the visuals, hence its
+ * separation from the rest of the classes for Minesweeper. Actual game logic is
+ * primarily handled within the {@link MinesweeperLevel} class.
+ * 
+ * @see MinesweeperLevel
+ * @see MinesweeperMenu
+ * @see Game
+ */
 public class MinesweeperGame extends Game {
-
-    private static double BORDER_SIZE = 2.5 * Configuration.ZOOM;
-    private static Color BACKGROUND_COLOR = Color.WHITE.deriveColor(0, 1, 0.65, 1);
-    private static Color BORDER_COLOR = Color.GRAY;
-    private static Color TOP_LEFT_COLOR = Color.WHITE.deriveColor(0, 1, 0.25, 1);
-    private static Color BOTTOM_RIGHT_COLOR = Color.WHITE.deriveColor(0, 1, 0.8, 1);
 
     private Group menuGroup = new Group();
     private Group gameGroup;
@@ -41,8 +49,10 @@ public class MinesweeperGame extends Game {
      */
     public MinesweeperGame() {
         super();
-        this.setPlayer(new NotPlayer(0, 0));
+        this.setPlayer(new NotPlayer());
         this.setIconPath("minesweeper.png");
+        // uncomment when Scoreboard is completed
+        // this.scoreboard = new Scoreboard(this.getName(), new ScoreComparator());
     }
 
     public GameState getGameState() {
@@ -65,6 +75,12 @@ public class MinesweeperGame extends Game {
     @Override
     public void resetCurrentLevel() {
         this.getCurrentLevel().reset();
+    }
+
+    @Override
+    public void resetGame() {
+        this.changeLevel("trivial");
+        this.pause();
     }
 
     @Override
@@ -105,34 +121,43 @@ public class MinesweeperGame extends Game {
     public Parent createRootNode(Group bgGroup, Group fgGroup) {
         this.gameGroup = fgGroup;
         StackPane main = new StackPane(bgGroup, fgGroup, menuGroup);
-        StackPane beveledPane = new BeveledBorderPaneBuilder(main).backgroundColor(BACKGROUND_COLOR)
-                .bottomRightColor(BOTTOM_RIGHT_COLOR).topLeftColor(TOP_LEFT_COLOR).bevelThickness(BORDER_SIZE).build();
-        beveledPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        StackPane mainPane = new BeveledBorderPaneBuilder(main)
+                .backgroundColor(MinesweeperStyle.uiBgColor())
+                .bottomRightColor(MinesweeperStyle.uiLightColor())
+                .topLeftColor(MinesweeperStyle.uiDarkColor())
+                .bevelThickness(MinesweeperStyle.uiBorderSize())
+                .build();
+        mainPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
         Region separator = new Region();
-        separator.setPrefHeight(BORDER_SIZE * 2);
-        separator.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                new BorderWidths(BORDER_SIZE), Insets.EMPTY)));
+        separator.setPrefHeight(MinesweeperStyle.uiBorderSize() * 2);
+        separator.setBorder(new Border(new BorderStroke(MinesweeperStyle.uiBorderColor(),
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                new BorderWidths(MinesweeperStyle.uiBorderSize()), Insets.EMPTY)));
 
-        VBox box = new VBox(this.getUICollection().getRenderableUI(), separator, beveledPane);
-        box.setAlignment(Pos.TOP_CENTER);
-        box.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                new BorderWidths(BORDER_SIZE * 2), Insets.EMPTY)));
-        StackPane beveledBox = new BeveledBorderPaneBuilder(box).backgroundColor(BORDER_COLOR)
-                .bottomRightColor(TOP_LEFT_COLOR).topLeftColor(BOTTOM_RIGHT_COLOR).bevelThickness(BORDER_SIZE).build();
+        VBox content = new VBox(this.getUICollection().getRenderableUI(), separator, mainPane);
+        content.setAlignment(Pos.TOP_CENTER);
+        content.setBorder(new Border(new BorderStroke(MinesweeperStyle.uiBorderColor(), BorderStrokeStyle.SOLID,
+                CornerRadii.EMPTY,
+                new BorderWidths(MinesweeperStyle.uiBorderSize() * 2), Insets.EMPTY)));
+        StackPane outerPane = new BeveledBorderPaneBuilder(content)
+                .backgroundColor(MinesweeperStyle.uiBorderColor())
+                .bottomRightColor(MinesweeperStyle.uiDarkColor())
+                .topLeftColor(MinesweeperStyle.uiLightColor())
+                .bevelThickness(MinesweeperStyle.uiBorderSize()).build();
 
-        return beveledBox;
+        return outerPane;
     }
 
     @Override
     public double getWindowHeight() {
         return super.getWindowHeight() + this.getUICollection().getRenderableUI().getLayoutBounds().getHeight()
-                + BORDER_SIZE * 10;
+                + MinesweeperStyle.uiBorderSize() * 10;
     }
 
     @Override
     public double getWindowWidth() {
-        return super.getWindowWidth() + BORDER_SIZE * 8;
+        return super.getWindowWidth() + MinesweeperStyle.uiBorderSize() * 8;
     }
 
     @Override

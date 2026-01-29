@@ -4,6 +4,12 @@ import app.display.common.SpriteLocation;
 import app.gameengine.Game;
 import app.gameengine.model.gameobjects.Collectible;
 
+/**
+ * A collectible which allows the player to throw damaging magic projectiles.
+ * 
+ * @see Collectible
+ * @see PlayerMagicProjectile
+ */
 public class MagicPickup extends Collectible {
 
 

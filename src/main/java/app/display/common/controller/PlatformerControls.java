@@ -3,6 +3,7 @@ package app.display.common.controller;
 import app.Settings;
 import app.gameengine.Game;
 import app.gameengine.model.physics.Vector2D;
+import app.games.mario.MarioControls;
 import app.games.platformerobjects.PlatformerPlayer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -16,15 +17,16 @@ import javafx.scene.input.KeyEvent;
  * <p>
  * This class offers a lot of flexibility, and a high degree of variability can
  * be achieved simply through extending this class and modifying the default
- * values. These values controls qualities such as the movement speed, movement
+ * values. These values control qualities such as the movement speed, movement
  * acceleration, and friction, all of which can be separately controlled for the
  * ground and in the air.
  * <p>
  * Note that this class assumes it is being used with a platformer, and that the
- * player is a {@code PlatformerPlayer} or a subclass.
+ * player is a {@code PlatformerPlayer} or a subclass of such.
  * 
  * @see PlatformerPlayer
  * @see KeyboardControls
+ * @see MarioControls
  */
 public class PlatformerControls extends KeyboardControls {
 
@@ -36,8 +38,8 @@ public class PlatformerControls extends KeyboardControls {
     protected double maxMoveSpeed = 7;
     /**
      * How quickly the player accelerates on the ground. Set to
-     * Double.POSITIVE_INFINITY to instantly switch directions on the ground. If
-     * you change this, you should probably also change the
+     * {@link Double#POSITIVE_INFINITY} to instantly switch directions on the
+     * ground. If you change this, you should probably also change the
      * {@link #groundTurnaroundAcceleration}. Units/s^2.
      */
     protected double groundAcceleration = 40;
@@ -52,9 +54,9 @@ public class PlatformerControls extends KeyboardControls {
     protected double groundTurnaroundAcceleration = groundAcceleration;
     /**
      * How quickly the player accelerates in the air. Set to
-     * Double.POSITIVE_INFINITY to instantly switch directions in the air. If you
-     * change this, you should probably also change the
-     * {@link #airTurnaroundAcceleration}. Units/s^2.
+     * {@link Double#POSITIVE_INFINITY} to instantly switch directions in the air,
+     * or {@code 0} to disable in-air acceleration. If you change this, you should
+     * probably also change the {@link #airTurnaroundAcceleration}. Units/s^2.
      */
     protected double airAcceleration = 30;
     /**
@@ -68,18 +70,23 @@ public class PlatformerControls extends KeyboardControls {
     protected double airTurnaroundAcceleration = airAcceleration;
     /**
      * How quickly the player decelerates on the ground when no directional keys are
-     * pressed. Set to Double.POSITIVE_INFINITY to instantly stop, or 0 for fun ice
-     * physics. Units/s^2.
+     * pressed. Set to {@link Double#POSITIVE_INFINITY} to instantly stop, or
+     * {@code 0} for fun ice physics. Units/s^2.
      */
     protected double groundFriction = 30;
     /**
      * How quickly the player decelerates in the air when no directional keys are
-     * pressed. Set to Double.POSITIVE_INFINITY to instantly stop, or 0 to continue
-     * moving unhindered. Units/s^2.
+     * pressed. Set to {@link Double#POSITIVE_INFINITY} to instantly stop, or
+     * {@code 0} to continue moving unhindered. Units/s^2.
      */
     protected double airFriction = 0;
 
     // ---------------------- Jumping movement constants ----------------------
+    /**
+     * The downward acceleration that is applied to the player. Note that this
+     * <em>only</em> affects the player, and other objects' gravity is expected to
+     * be handled separately. Units/s^2
+     */
     protected double gravity = 40;
     /**
      * When the jump button is pressed, the upward (negative Y) speed to which the
@@ -89,10 +96,13 @@ public class PlatformerControls extends KeyboardControls {
     /**
      * How long the jump button can be held to continue upward movement. For this
      * duration, holding the jump button allows you to move higher, though at the
-     * same constant velocity. Set to 0 for more standard single-jump controls.
-     * Seconds.
+     * same constant velocity. Set to {@code 0} for more standard single-jump
+     * controls. Seconds.
      */
     protected double maxJumpTime = 0;
+    /**
+     * Time spent in the air.
+     */
     private double airTime = 0;
 
     // --------------------------- Active controls ----------------------------
@@ -132,7 +142,6 @@ public class PlatformerControls extends KeyboardControls {
     @Override
     public void handle(KeyEvent event) {
         super.handle(event);
-
         if (Settings.paused()) {
             return;
         }

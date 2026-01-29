@@ -2,6 +2,12 @@ package app.games.pacman;
 
 import app.gameengine.model.gameobjects.DynamicGameObject;
 
+/**
+ * A wall which can only be passed through by ghosts in Pacman.
+ * 
+ * @see PacmanWall
+ * @see PacmanGame
+ */
 public class GhostGate extends PacmanWall {
 
     public GhostGate(double x, double y) {

@@ -6,12 +6,23 @@ import java.util.HashMap;
 
 import app.display.common.SpriteLocation;
 import app.display.common.sound.AudioManager;
+import app.gameengine.model.gameobjects.Agent;
 import app.gameengine.model.gameobjects.DynamicGameObject;
 import app.gameengine.model.gameobjects.StaticGameObject;
 import app.gameengine.model.physics.Vector2D;
-import app.games.topdownobjects.Enemy;
 
-public class Ghost extends Enemy {
+/**
+ * The ghost enemies in a game of Pacman.
+ * <p>
+ * Each ghost has one of four colors that determines certain aspects of their
+ * behavior. Each ghost is at any time in one of five states which determines
+ * how they pursue or flee from the player.
+ * 
+ * @see PacmanGame
+ * @see PacmanLevel
+ * @see Agent
+ */
+public class Ghost extends Agent {
 
     private PacmanGame game;
     private String color;
@@ -19,7 +30,7 @@ public class Ghost extends Enemy {
     private String state = "Spawner";
 
     public Ghost(double x, double y, PacmanGame game, String color) {
-        super(x, y, 1, 1);
+        super(x, y, 1);
         this.color = color;
         this.game = game;
         this.setState("Spawner");
@@ -36,7 +47,6 @@ public class Ghost extends Enemy {
         };
         this.spriteSheetFilename = "pacman/ghosts.png";
         this.defaultSpriteLocation = new SpriteLocation(0, this.spriteRow);
-        this.getEffects().clear();
         this.initAnimations();
     }
 
@@ -68,13 +78,13 @@ public class Ghost extends Enemy {
 
     @Override
     public void followPath(double dt) {
-        // If no path, move with orientation
-        if (this.getPath() != null) {
-            super.followPath(dt);
-            return;
-        }
         Vector2D velocity = Vector2D.mul(this.getOrientation(), this.movementSpeed);
         this.setVelocity(velocity.getX(), velocity.getY());
+        double dist = Vector2D.euclideanDistance(this.getLocation(), Vector2D.round(this.getLocation()));
+        double threshold = dt * this.movementSpeed;
+        if (dist < threshold && !this.state.equals("Spawner")) {
+            this.getLocation().round();
+        }
     }
 
     @Override
@@ -143,13 +153,9 @@ public class Ghost extends Enemy {
             this.game.getCurrentLevel().eatGhost(this);
             this.onDestroy();
             return;
+        } else if (otherObject.isPlayer()) {
+            otherObject.takeDamage(1);
         }
-        super.collideWithDynamicObject(otherObject);
-    }
-
-    @Override
-    public void onDestroy() {
-        AudioManager.playSoundEffect("pacman/eat_ghost.wav");
     }
 
     @Override
@@ -161,22 +167,17 @@ public class Ghost extends Enemy {
     }
 
     @Override
+    public void onDestroy() {
+        AudioManager.playSoundEffect("pacman/eat_ghost.wav");
+    }
+
+    @Override
     public int getSpriteHeight() {
         return 32;
     }
 
     @Override
     public int getSpriteWidth() {
-        return 32;
-    }
-
-    @Override
-    public int getSpriteTileHeight() {
-        return 32;
-    }
-
-    @Override
-    public int getSpriteTileWidth() {
         return 32;
     }
 

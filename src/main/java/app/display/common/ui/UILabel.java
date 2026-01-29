@@ -36,7 +36,7 @@ public class UILabel extends UIElement {
      * Constructs a new ui label with the default properties.
      */
     public UILabel() {
-        this("default", Font.font(Configuration.ZOOM * 5), Configuration.ZOOM * 5, Configuration.ZOOM * 5, Color.WHITE,
+        this("default", Font.font(Configuration.DEFAULT_TEXT_SIZE), Configuration.DEFAULT_TEXT_SIZE, Configuration.DEFAULT_TEXT_SIZE, Color.WHITE,
                 Color.BLACK, Pos.TOP_RIGHT);
     }
 

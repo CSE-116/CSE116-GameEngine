@@ -1,9 +1,16 @@
 package app.games.mario;
 
 import app.display.common.SpriteLocation;
-import app.games.platformerobjects.PlatformerWall;
+import app.games.commonobjects.Wall;
 
-public class Block extends PlatformerWall {
+/**
+ * A wall in Mario that displays one of a few different sprites.
+ * 
+ * @see Wall
+ * @see MarioGame
+ * @see MarioLevel
+ */
+public class Block extends Wall {
 
     public Block(double x, double y, String type) {
         super(x, y);

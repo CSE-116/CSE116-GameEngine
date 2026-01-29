@@ -12,6 +12,14 @@ import app.gameengine.Level;
 import app.gameengine.model.physics.Vector2D;
 import app.games.platformerobjects.Collider;
 
+/**
+ * An enemy in Mario that is a turtle.
+ * 
+ * @see Goomba
+ * @see Enemy
+ * @see MarioLevel
+ * @see MarioGame
+ */
 public class Koopa extends Goomba {
 
     public Koopa(double x, double y) {
@@ -28,7 +36,8 @@ public class Koopa extends Goomba {
     @Override
     public void onDestroy() {
         this.getEffects().add(new TimedEffect(new SpriteGraphics(new BlankTile(this.getLocation().getX(),
-                this.getLocation().getY(), "mario/smb_enemies_tall.png", new SpriteLocation(5, 0))), 2));
+                this.getLocation().getY(), "mario/smb_enemies_tall.png", new SpriteLocation(5, 0), getSpriteWidth(),
+                getSpriteHeight())), DEATH_EFFECT_DURATION));
     }
 
     @Override
@@ -56,16 +65,6 @@ public class Koopa extends Goomba {
 
     @Override
     public int getSpriteWidth() {
-        return 16;
-    }
-
-    @Override
-    public int getSpriteTileHeight() {
-        return 24;
-    }
-
-    @Override
-    public int getSpriteTileWidth() {
         return 16;
     }
 

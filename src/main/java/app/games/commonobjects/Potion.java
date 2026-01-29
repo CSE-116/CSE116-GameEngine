@@ -3,6 +3,11 @@ package app.games.commonobjects;
 import app.display.common.SpriteLocation;
 import app.gameengine.model.gameobjects.StaticGameObject;
 
+/**
+ * A static object that heals the player on collision.
+ * 
+ * @see StaticGameObject
+ */
 public class Potion extends StaticGameObject {
 
     public Potion(double x, double y, int heal) {

@@ -63,22 +63,26 @@ public interface RenderableAsSprite {
      * Returns the width of each sprite tile in pixels. This property describes the
      * width of each tile of the sprite sheet when calculating the position to draw
      * from, using the {@code SpriteLocation}.
+     * <p>
+     * By default, this will return the same value as {@link #getSpriteWidth()}.
      * 
      * @return the width of each spritesheet tile
      */
     default int getSpriteTileWidth() {
-        return Configuration.SPRITE_SIZE;
+        return getSpriteWidth();
     }
 
     /**
      * Returns the height of each sprite tile in pixels. This property describes the
      * height of each tile of the sprite sheet when calculating the position to draw
      * from, using the {@code SpriteLocation}.
+     * <p>
+     * By default, this will return the same value as {@link #getSpriteHeight()}
      * 
      * @return the height of each spritesheet tile
      */
     default int getSpriteTileHeight() {
-        return Configuration.SPRITE_SIZE;
+        return getSpriteHeight();
     }
 
     /**
@@ -97,6 +101,31 @@ public interface RenderableAsSprite {
      */
     default int getSpriteOffsetY() {
         return 0;
+    }
+
+    /**
+     * Returns the value used the scale the entire sprite in the horizontal
+     * dimension. A value of 1, which is the default, means no scaling is applied,
+     * aside from engine-wide zoom set by {@link Configuration#ZOOM}. A larger value
+     * will make the sprite appear wider, and a smaller value will make it appear
+     * narrower.
+     * 
+     * @return the horizontal scaling value
+     */
+    default double getSpriteScaleX() {
+        return 1;
+    }
+
+    /**
+     * Returns the value used the scale the entire sprite in the vertical dimension.
+     * A value of 1, which is the default, means no scaling is applied, aside from
+     * engine-wide zoom set by {@link Configuration#ZOOM}. A larger value will make
+     * the sprite appear taller, and a smaller value will make it appear shorter.
+     * 
+     * @return the vertical scaling value
+     */
+    default double getSpriteScaleY() {
+        return 1;
     }
 
     /**

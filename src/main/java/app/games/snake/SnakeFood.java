@@ -6,6 +6,7 @@ import app.gameengine.model.gameobjects.StaticGameObject;
 
 /**
  * Food for a game of snake. Being eaten causes the snake to increase in length.
+ * Pretty much just a colored rectangle.
  * 
  * @see SnakeGame
  * @see SnakeLevel

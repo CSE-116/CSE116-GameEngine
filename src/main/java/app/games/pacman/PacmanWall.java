@@ -5,6 +5,16 @@ import app.display.common.effects.HitboxOutline;
 import app.games.commonobjects.Wall;
 import javafx.scene.paint.Color;
 
+/**
+ * A wall for use in Pacman.
+ * <p>
+ * This wall has many different sprites for the various kinds of walls and
+ * corners in the level. It would have been smarter to just use a background
+ * image.
+ * 
+ * @see Wall
+ * @see PacmanGame
+ */
 public class PacmanWall extends Wall {
 
     public PacmanWall(double x, double y, String type) {
@@ -80,7 +90,7 @@ public class PacmanWall extends Wall {
                 yield new SpriteLocation(4, 0);
             case "Inner":
             default:
-                yield new SpriteLocation(3, 1);
+                yield new SpriteLocation(4, 1);
         };
     }
 

@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import app.Settings;
 import app.display.common.controller.MouseControls;
-import app.display.minesweeper.MinesweeperGame;
 import app.gameengine.model.physics.Vector2D;
 import app.gameengine.utils.GameUtils;
 import app.games.minesweeper.CoverTile.TileState;

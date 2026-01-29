@@ -15,8 +15,17 @@ import app.gameengine.model.physics.Vector2D;
 import app.games.platformerobjects.Collider;
 import app.games.topdownobjects.Enemy;
 
+/**
+ * An enemy shaped like a mushroom who canonically betrayed the mushroom kingdom.
+ * 
+ * @see Enemy
+ * @see Koopa
+ * @see MarioLevel
+ * @see MarioGame
+ */
 public class Goomba extends Enemy {
 
+    protected static final double DEATH_EFFECT_DURATION = 2;
     protected Collider collider;
     protected Collider leftCollider;
     protected Collider rightCollider;
@@ -39,7 +48,8 @@ public class Goomba extends Enemy {
     @Override
     public void onDestroy() {
         this.getEffects().add(new TimedEffect(new SpriteGraphics(new BlankTile(this.getLocation().getX(),
-                this.getLocation().getY(), "mario/smb_enemies_square.png", new SpriteLocation(1, 0))), 2));
+                this.getLocation().getY(), "mario/smb_enemies_square.png", new SpriteLocation(1, 0))),
+                DEATH_EFFECT_DURATION));
     }
 
     @Override

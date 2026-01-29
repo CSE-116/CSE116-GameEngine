@@ -36,8 +36,8 @@ public class AssetManager {
     private static final String ASSETS_DIRECTORY = "data/sprites/";
     private static final String BACKGROUND_DIRECTORY = "data/backgrounds/";
     private static final String ICON_DIRECTORY = "data/icons/";
-    private static final String DEFAULT_IMAGE_FILENAME = "MiniWorldSprites/User Interface/UiIcons.png";
-    private static final String DEFAULT_BACKGROUND_IMAGE_FILENAME = "nature/nature_4/full.png";
+    private static final String DEFAULT_IMAGE_FILENAME = "fallback/default.png";
+    private static final String DEFAULT_BACKGROUND_IMAGE_FILENAME = "fallback/default.png";
     private static final String DEFAULT_ICON_IMAGE_FILENAME = "default.png";
     protected static final Image DEFAULT_IMAGE = getDefaultImage();
     protected static final Image SCALED_DEFAULT_IMAGE = scaleImage(DEFAULT_IMAGE);
@@ -67,7 +67,7 @@ public class AssetManager {
 
             return image;
         } catch (FileNotFoundException e) {
-            System.out.println("** Invalid Sprite sheet " + filename + ". Using default image **");
+            System.err.println("** Invalid Sprite sheet " + filename + ". Using default image **");
             if (Configuration.INTEGER_SCALE) {
                 loadedAssets.put(filename, SCALED_DEFAULT_IMAGE);
                 return SCALED_DEFAULT_IMAGE;
@@ -101,7 +101,7 @@ public class AssetManager {
             loadedAssets.put(filename + width + height + preserveRatio, image);
             return image;
         } catch (FileNotFoundException e) {
-            System.out.println("** Invalid background image " + filename + ". Using default image **");
+            System.err.println("** Invalid background image " + filename + ". Using default image **");
             Image image = getDefaultBackgroundImage(width, height, preserveRatio);
             loadedAssets.put(filename + width + height + preserveRatio, image);
             return image;
@@ -127,7 +127,7 @@ public class AssetManager {
             loadedAssets.put(filename, image);
             return image;
         } catch (FileNotFoundException e) {
-            System.out.println("** Invalid icon image " + filename + ". Using default image **");
+            System.err.println("** Invalid icon image " + filename + ". Using default image **");
             Image image = getDefaultIconImage();
             loadedAssets.put(ICON_DIRECTORY + filename, image);
             return image;

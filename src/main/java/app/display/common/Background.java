@@ -81,18 +81,6 @@ public class Background {
     }
 
     /**
-     * Constructs a tiled background using the given sprite sheet and
-     * {@code SpriteLocation}. Each tile is a square of size
-     * {@value app.Configuration#SPRITE_SIZE} pixels, and the sprite location
-     * contains the column and row of those tiles within the sprite sheet.
-     * 
-     * @param spriteSheetFileName the path to the sprite sheet image, from the
-     *                            default sprite directory
-     * @param spriteLocation      the location of the sprite within it's sprite
-     *                            sheet
-     */
-
-    /**
      * Constructs a tiled background using the given sprite sheet and tile location
      * within that sprite sheet. Each tile is a square of size
      * {@value app.Configuration#SPRITE_SIZE} pixels, and the column and row

@@ -24,7 +24,7 @@ import javafx.scene.image.ImageView;
  */
 public class SpriteGraphics extends ImageView {
 
-    public static final SpriteLocation DEFAULT_IMAGE_LOCATION = new SpriteLocation(1, 3);
+    public static final SpriteLocation DEFAULT_IMAGE_LOCATION = new SpriteLocation(0, 0);
 
     /**
      * Constructs a SpriteGraphics object for the given renderable, using the
@@ -81,8 +81,12 @@ public class SpriteGraphics extends ImageView {
             fullTileHeight *= (int) Configuration.ZOOM;
         }
         this.setViewport(new Rectangle2D(fullTileWidth * x, fullTileHeight * y, tileWidth, tileHeight));
-        this.setScaleX(location.isReflectedHorizontally() ? -1 : 1);
-        this.setScaleY(location.isReflectedVertically() ? -1 : 1);
+        double scaleX = renderableObject.getSpriteScaleX();
+        double scaleY = renderableObject.getSpriteScaleY();
+        this.setScaleX(location.isReflectedHorizontally() ? -scaleX : scaleX);
+        this.setScaleY(location.isReflectedVertically() ? -scaleY : scaleY);
+        this.setTranslateX((scaleX - 1) * tileWidth / 2);
+        this.setTranslateY((scaleY - 1) * tileHeight / 2);
         this.setRotate(location.getRotation());
     }
 

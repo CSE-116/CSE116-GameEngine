@@ -62,7 +62,7 @@ public class RoguelikeGame extends Game {
         if (level instanceof RoguelikeLevel roguelikeLevel) {
             this.levelMap.put(level.getName(), roguelikeLevel);
         } else {
-            System.out.println("** Level could not be added **");
+            System.err.println("** Level could not be added **");
         }
     }
 

@@ -107,7 +107,7 @@ public class RoguelikeLevel extends TopDownLevel {
         ArrayList<Marker> markers = this.extractAndRemoveMarkers(ENEMY_MARKER_ID);
         for (Marker marker : markers) {
             DynamicGameObject randomEnemy = EnemyFactory.getRandomEnemy(marker.getLocation());
-            this.getDynamicObjects().add(randomEnemy);
+            this.addDynamicObject(randomEnemy);
         }
     }
 
@@ -116,7 +116,7 @@ public class RoguelikeLevel extends TopDownLevel {
 
         for (Marker marker : markers) {
             StaticGameObject randomLoot = CollectibleFactory.getRandomLoot(marker.getLocation(), game);
-            this.getStaticObjects().add(randomLoot);
+            this.addStaticObject(randomLoot);
         }
     }
 

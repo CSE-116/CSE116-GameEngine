@@ -23,6 +23,19 @@ import javafx.scene.text.Font;
  */
 public class FancyTextEffect extends TimedEffect {
 
+    private static final String TEXT_STYLE = String.join(" ",
+            "-fx-background-color: black;",
+            "-fx-padding: " + Configuration.ZOOM * 3 + ";",
+            "-fx-border-color: white;",
+            "-fx-border-width: " + Configuration.ZOOM + ";",
+            "-fx-border-radius: " + Configuration.ZOOM * 3 + ";",
+            "-fx-background-radius: " + Configuration.ZOOM * 3 + ";");
+
+    private static final String BACKGROUND_STYLE = String.join(" ",
+            "-fx-background-color: rgba(0, 0, 0, 0.8);",
+            "-fx-padding: " + Configuration.ZOOM * 3 + ";",
+            "-fx-background-radius: " + Configuration.ZOOM * 6 + ";");
+
     private StackPane content;
     private Vector2D offset;
 
@@ -46,16 +59,15 @@ public class FancyTextEffect extends TimedEffect {
 
     private static StackPane createFrame(String message) {
         Label label = new Label();
-        label.setFont(new Font("Arial", Configuration.ZOOM * 5));
+        label.setFont(new Font("Arial", Configuration.DEFAULT_TEXT_SIZE));
         label.setTextFill(Color.WHITE);
-        label.setStyle(
-                "-fx-background-color: black; -fx-padding: 10; -fx-border-color: white; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10");
+        label.setStyle(TEXT_STYLE);
         label.setWrapText(true);
-        label.setMaxWidth(100 * Configuration.ZOOM);
+        label.setMaxWidth(100 * Configuration.TEXT_SCALE);
         label.setText(message);
 
         StackPane content = new StackPane(label);
-        content.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 10; -fx-background-radius: 20");
+        content.setStyle(BACKGROUND_STYLE);
         return content;
     }
 

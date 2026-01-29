@@ -5,6 +5,18 @@ import app.display.common.sound.AudioManager;
 import app.gameengine.model.gameobjects.DynamicGameObject;
 import app.gameengine.model.gameobjects.StaticGameObject;
 
+/**
+ * A pellet in a game of Pacman.
+ * <p>
+ * Pellets increase score and are required to win the game. {@link PowerPellet}s
+ * cause the player to enter a state where you can eat the ghosts for extra points.
+ * 
+ * @see PowerPellet
+ * @see PacmanLevel
+ * @see PacmanGame
+ * @see Ghost
+ * @see StaticGameObject
+ */
 public class Pellet extends StaticGameObject {
 
     private PacmanGame game;

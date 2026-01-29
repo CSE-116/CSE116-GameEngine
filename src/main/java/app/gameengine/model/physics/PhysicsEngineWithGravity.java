@@ -2,6 +2,7 @@ package app.gameengine.model.physics;
 
 import java.util.ArrayList;
 
+import app.Settings;
 import app.gameengine.Level;
 import app.gameengine.model.gameobjects.DynamicGameObject;
 import app.gameengine.model.gameobjects.StaticGameObject;
@@ -36,6 +37,9 @@ public class PhysicsEngineWithGravity extends PhysicsEngine {
 
         for (int i = 0; i < dynamicObjects.size(); i++) {
             DynamicGameObject object1 = dynamicObjects.get(i);
+            if (Settings.noclip() && object1.isPlayer()) {
+                continue;
+            }
             // Detect initial static object collisions
             ArrayList<Pair<StaticGameObject, Double>> staticCollisions = new ArrayList<>();
             for (StaticGameObject object2 : staticObjects) {
@@ -57,6 +61,9 @@ public class PhysicsEngineWithGravity extends PhysicsEngine {
             ArrayList<Pair<DynamicGameObject, Double>> dynamicCollisions = new ArrayList<>();
             for (int j = i + 1; j < dynamicObjects.size(); j++) {
                 DynamicGameObject object2 = dynamicObjects.get(j);
+                if (Settings.noclip() && object2.isPlayer()) {
+                    continue;
+                }
                 double overlap = getOverlap(object1.getHitbox(), object2.getHitbox());
                 if (overlap > 0) {
                     dynamicCollisions.add(new Pair<>(object2, overlap));

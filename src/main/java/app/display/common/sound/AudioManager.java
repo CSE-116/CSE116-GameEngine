@@ -1,6 +1,7 @@
 package app.display.common.sound;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 import app.Configuration;
@@ -50,9 +51,15 @@ public class AudioManager {
      * @param volume   how loud the sound should be between 0 and 1.
      */
     public static void playSoundEffect(String filename, double volume) {
+        if (volume <= 0) {
+            return;
+        }
         try {
             if (!soundEffects.containsKey(filename)) {
                 String soundFile = SOUNDS_DIRECTORY + filename;
+                if (!new File(soundFile).exists()) {
+                    throw new FileNotFoundException();
+                }
                 AudioClip clip = new AudioClip(new File(soundFile).toURI().toString());
                 clip.setVolume(volume);
                 soundEffects.put(filename, clip);
@@ -60,7 +67,7 @@ public class AudioManager {
             } else {
                 soundEffects.get(filename).play();
             }
-        } catch (MediaException mediaException) {
+        } catch (MediaException | FileNotFoundException mediaException) {
             System.err.println("Error when playing sound: The sound [" + filename + "] does not exist!");
         }
     }
@@ -82,12 +89,18 @@ public class AudioManager {
      * @param volume   how loud the music should be between 0 and 1.
      */
     public static void playMusic(String filename, double volume) {
+        if (volume <= 0) {
+            return;
+        }
         try {
             Media newMusic;
             if (musicTracks.containsKey(filename)) {
                 newMusic = musicTracks.get(filename);
             } else {
                 String soundFile = MUSIC_DIRECTORY + filename;
+                if (!new File(soundFile).exists()) {
+                    throw new FileNotFoundException();
+                }
                 newMusic = new Media(new File(soundFile).toURI().toString());
                 musicTracks.put(filename, newMusic);
             }
@@ -105,7 +118,7 @@ public class AudioManager {
             musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             musicPlayer.setVolume(volume);
             musicPlayer.play();
-        } catch (MediaException mediaException) {
+        } catch (MediaException | FileNotFoundException mediaException) {
             System.err.println("Error when playing music: The music [" + filename + "] does not exist!");
         }
     }

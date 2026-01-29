@@ -9,7 +9,7 @@ import app.games.GameFactory;
  * The static variables defined in this class determine certain properties of
  * the game, including the game being played, the default sprite size and zoom
  * factor, whether integer scaling is enabled, and the default animation
- * duration. Unlike {@link Configuration}, these variables are final and will
+ * duration. Unlike {@link Settings}, these variables are final and will
  * not change at runtime.
  * <p>
  * Note that most of these values are only defaults, and games/levels/objects
@@ -24,7 +24,7 @@ public class Configuration {
      * The game being played. Must be a valid option within the factory method
      * {@link GameFactory#getGame}.
      */
-    public static final String GAME = "Sample Game";
+    public static final String GAME = "test";
 
     /**
      * Multiplier for increasing the size of the window and objects within the game.
@@ -46,10 +46,16 @@ public class Configuration {
     public static final double SCALE_FACTOR = SPRITE_SIZE * ZOOM;
 
     /**
+     * Scale factor specifically for text elements. By default, this has the same
+     * value as {@link #ZOOM}, but it can be increased or decreased independently.
+     */
+    public static final double TEXT_SCALE = ZOOM;
+
+    /**
      * Default size for text elements within the game. If a size is not specified
      * when retrieving a font, this is the value that is used.
      */
-    public static final double DEFAULT_TEXT_SIZE = ZOOM * 5;
+    public static final double DEFAULT_TEXT_SIZE = TEXT_SCALE * 5;
 
     /**
      * Whether integer scaling is applied to rendered sprites in the game. This
@@ -57,7 +63,7 @@ public class Configuration {
      * and tends to have graphical bugs. Disabling it does, however, allow for
      * non-integer {@code #ZOOM} levels.
      */
-    public static final boolean INTEGER_SCALE = true; // true for sharper image
+    public static final boolean INTEGER_SCALE = true;
 
     /**
      * Default duration of animation frames, in seconds. This can be overridden if

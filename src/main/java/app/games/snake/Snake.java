@@ -15,9 +15,9 @@ import app.gameengine.model.gameobjects.StaticGameObject;
  */
 public class Snake extends Player {
 
-    public Snake(double x, double y, int maxLength) {
-        super(x, y, maxLength);
-        this.hp = 1;
+    public Snake(double x, double y) {
+        super(x, y, 10);
+        this.setOrientation(0, 1);
         this.spriteSheetFilename = "snake/snakeColors.png";
         this.defaultSpriteLocation = new SpriteLocation(0, 0);
         this.animations = new HashMap<>();
@@ -26,12 +26,17 @@ public class Snake extends Player {
     @Override
     public void collideWithStaticObject(StaticGameObject otherObject) {
         if (otherObject.getObjectType().equals("SnakeFood")) {
-            this.hp++;
             AudioManager.playSoundEffect("collect.wav");
         } else {
             AudioManager.playSoundEffect("explosion_small.wav");
             this.destroy();
         }
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.setOrientation(0, 1);
     }
 
 }

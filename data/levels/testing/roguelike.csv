@@ -1,0 +1,5 @@
+RoguelikeLevel,mediumLevel,12,10
+PlayerStartLocation,2,2
+BackgroundTile,MiniWorldSprites/Ground/Grass.png,2,0
+StaticGameObject,Wall,4,3
+DynamicGameObject,Demon,1,1,40,5
