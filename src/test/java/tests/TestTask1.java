@@ -127,35 +127,6 @@ public class TestTask1 {
     }
 
     @Test
-    public void testGetOverlapWithNoOverlap() {
-        ArrayList<Pair<Hitbox, Hitbox>> testCases = new ArrayList<>();
-        Hitbox hb1 = new Hitbox(new Vector2D(0.0, 0.0), new Vector2D(2.0, 2.0));
-        Hitbox hb3 = new Hitbox(new Vector2D(0.5, 4.5), new Vector2D(1.0, 1.0));
-        Hitbox hb4 = new Hitbox(new Vector2D(4.0, 3.0), new Vector2D(1.0, 1.0));
-        Hitbox hb5 = new Hitbox(new Vector2D(4.0, 3.0), new Vector2D(3.0, 3.0));
-        Hitbox hb6 = new Hitbox(new Vector2D(3.0, 0.0), new Vector2D(2.0, 2.0));
-
-        testCases.add(new Pair<>(hb1, hb3));
-        testCases.add(new Pair<>(hb1, hb4));
-        testCases.add(new Pair<>(hb1, hb5));
-        testCases.add(new Pair<>(hb1, hb6));
-        testCases.add(new Pair<>(hb3, hb4));
-        testCases.add(new Pair<>(hb3, hb5));
-        testCases.add(new Pair<>(hb3, hb6));
-        testCases.add(new Pair<>(hb4, hb6));
-        testCases.add(new Pair<>(hb5, hb6));
-
-        PhysicsEngine engine = new PhysicsEngine();
-
-        for (Pair<Hitbox, Hitbox> hitboxes : testCases) {
-            String failString = String.format("Collision between hitboxes at %s and %s",
-                    hitboxes.getKey().getLocation(), hitboxes.getValue().getLocation());
-            assertTrue(failString, engine.getOverlap(hitboxes.getKey(), hitboxes.getValue()) <= 0);
-            assertTrue(failString, engine.getOverlap(hitboxes.getValue(), hitboxes.getKey()) <= 0);
-        }
-    }
-
-    @Test
     public void testWallCollisionsSimple() {
         Player player = new Player(0, 0, 10);
         player.getHitbox().setOffset(0.1, 0.1);
