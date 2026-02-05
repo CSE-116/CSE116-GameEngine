@@ -78,7 +78,9 @@ public class SnakeGame extends Game {
     @Override
     public void resetCurrentLevel() {
         this.getPlayer().reset();
-        this.scoreboard.addScore(new GameStat("Snake", getCurrentLevel().getPlaytime(), getCurrentLevel().getScore()));
+        if (this.scoreboard != null) {
+            this.scoreboard.addScore(new GameStat("Snake", getCurrentLevel().getPlaytime(), getCurrentLevel().getScore()));
+        }
         this.loadLevel(getNewLevel());
         this.pause();
     }
