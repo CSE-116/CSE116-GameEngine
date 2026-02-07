@@ -24,7 +24,7 @@ public class Configuration {
      * The game being played. Must be a valid option within the factory method
      * {@link GameFactory#getGame}.
      */
-    public static final String GAME = "test";
+    public static final String GAME = "sample game";
 
     /**
      * Multiplier for increasing the size of the window and objects within the game.

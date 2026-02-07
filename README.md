@@ -19,7 +19,8 @@ assign. Being able to read, understand, and edit code that is not all your own i
 development journey. If you have any questions about how something works or why we did it that way, we would be happy to
 explain it!
 
-> [!warning] While you are encouraged to make changes and have fun with the project, you should be careful with the
+> [!WARNING] 
+> While you are encouraged to make changes and have fun with the project, you should be careful with the
 > changes you make.
 >
 > A good rule of thumb is to
